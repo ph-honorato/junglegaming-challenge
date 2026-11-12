@@ -1,4 +1,4 @@
-import { createRootRoute, createRouter, Outlet } from "@tanstack/react-router"
+import { createRootRoute, Outlet } from "@tanstack/react-router"
 import { TanStackRouterDevtools } from "@tanstack/router-devtools"
 import { Toaster } from "@/components/ui/toaster"
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
@@ -29,7 +29,7 @@ export function Providers({ children }: { children: ReactNode }) {
   )
 }
 
-const rootRoute = createRootRoute({
+export const Route = createRootRoute({
   component: () => (
     <Providers>
       <Outlet />
@@ -37,17 +37,3 @@ const rootRoute = createRootRoute({
     </Providers>
   ),
 })
-
-export const routeTree = rootRoute.addChildren([])
-
-export const router = createRouter({
-  routeTree,
-  defaultPreload: "intent",
-  scrollRestoration: true,
-})
-
-declare module "@tanstack/react-router" {
-  interface Register {
-    router: typeof router
-  }
-}
