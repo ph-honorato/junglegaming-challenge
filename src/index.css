@@ -1,8 +1,87 @@
 @import "tailwindcss";
 
 @theme {
-  --font-sans: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  --font-mono: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, monospace;
+  --font-sans:
+    system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-mono:
+    ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+
+  /* ==========================================================================
+     SEMANTIC COLOR PALETTE
+     ========================================================================== */
+
+  /* PAGE BACKGROUND
+     Usage: Body/page background color
+     Classes: bg-background
+     Tailwind: background-color: var(--color-background) */
+  --color-background: #140d0a;
+
+  /* CARD / SURFACE BACKGROUND
+     Usage: Default card backgrounds, containers, panels
+     Classes: bg-surface, bg-card
+     Tailwind: background-color: var(--color-surface) */
+  --color-surface: #241612;
+
+  /* ELEVATED / HIGHLIGHTED SURFACE
+     Usage: Cards/components needing visual separation or hover states
+     Classes: bg-surface-dark, bg-accent
+     Tailwind: background-color: var(--color-surface-dark) */
+  --color-surface-dark: #38220f;
+
+  /* PRIMARY BRAND COLOR
+     Usage: Primary buttons, selected tabs, active sliders, focus rings,
+            primary CTAs, links on hover, key interactive elements
+     Classes: bg-primary, text-primary, border-primary, ring-primary
+     Tailwind: background-color: var(--color-primary), color: var(--color-primary) */
+  --color-primary: #d28a4c;
+
+  /* SECONDARY / MUTED TEXT
+     Usage: Secondary text, descriptions, placeholders, disabled states,
+            unselected icons, metadata, timestamps
+     Classes: text-secondary, text-muted-foreground
+     Tailwind: color: var(--color-secondary) */
+  --color-secondary: #cfb28c;
+
+  /* COMMON WHITE / PRIMARY TEXT
+     Usage: Main body text, headings, selected icons, high-contrast text
+     Classes: text-common-white, text-card-foreground, text-popover-foreground,
+              text-accent-foreground, text-destructive-foreground
+     Tailwind: color: var(--color-common-white) */
+  --color-common-white: #f5f1eb;
+
+  /* ==========================================================================
+     SHADCN/UI COMPATIBLE ALIASES (map to semantic colors above)
+     ========================================================================== */
+
+  /* Muted backgrounds (same as surface) */
+  --color-muted: #241612;
+  /* Muted foreground text (same as secondary) */
+  --color-muted-foreground: #cfb28c;
+  /* Border color (same as surface-dark) */
+  --color-border: #38220f;
+  /* Focus ring color (same as primary) */
+  --color-ring: #d28a4c;
+
+  /* Card component colors */
+  --color-card: #241612;
+  --color-card-foreground: #f5f1eb;
+
+  /* Popover component colors */
+  --color-popover: #241612;
+  --color-popover-foreground: #f5f1eb;
+
+  /* Primary button text color (on primary background) */
+  --color-primary-foreground: #140d0a;
+  /* Secondary button text color (on secondary background) */
+  --color-secondary-foreground: #140d0a;
+
+  /* Accent component colors (hover/active states) */
+  --color-accent: #38220f;
+  --color-accent-foreground: #f5f1eb;
+
+  /* Destructive/Error colors */
+  --color-destructive: #dc2626;
+  --color-destructive-foreground: #f5f1eb;
 }
 
 * {
@@ -20,6 +99,8 @@ html {
 body {
   min-height: 100vh;
   font-family: var(--font-sans);
+  background-color: var(--color-background);
+  color: var(--color-common-white);
 }
 
 #root {
@@ -59,7 +140,7 @@ ol {
 }
 
 :focus-visible {
-  outline: 2px solid #6366f1;
+  outline: 2px solid var(--color-primary);
   outline-offset: 2px;
 }
 
@@ -80,14 +161,14 @@ ol {
 }
 
 ::-webkit-scrollbar-track {
-  background: transparent;
+  background: var(--color-surface);
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #888;
+  background: var(--color-surface-dark);
   border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #666;
+  background: var(--color-primary);
 }
