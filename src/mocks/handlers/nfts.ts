@@ -60,6 +60,7 @@ const handleListNFTs = async ({ request }: { request: Request }) => {
   const filterParams = {
     q: url.searchParams.get("q") || undefined,
     category: url.searchParams.get("category") || undefined,
+    collection: url.searchParams.get("collection") || undefined,
     minPrice: url.searchParams.get("minPrice") || undefined,
     maxPrice: url.searchParams.get("maxPrice") || undefined,
     network: url.searchParams.get("network") || undefined,
