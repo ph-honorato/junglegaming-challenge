@@ -32,7 +32,7 @@ export function CatalogFilters(_props: CatalogFiltersProps) {
     filterKey: keyof typeof searchParams,
   ) => (
     <div className="border-border last:border-0 last:pb-0">
-      <div className="flex items-center justify-between mb-2">
+      <div className="flex items-center justify-between mb-3">
         <h3 className="font-semibold flex items-center">{title}</h3>
         {searchParams[filterKey] && (
           <Button
@@ -66,20 +66,6 @@ export function CatalogFilters(_props: CatalogFiltersProps) {
     setNetwork(checked ? network : undefined);
   };
 
-  const handleMinPriceChange = (value: string) => {
-    const num = value === "" ? 0 : parseFloat(value);
-    if (!isNaN(num)) {
-      setMinPriceInput(Math.min(num, maxPriceInput));
-    }
-  };
-
-  const handleMaxPriceChange = (value: string) => {
-    const num = value === "" ? parseFloat(priceRange.max) : parseFloat(value);
-    if (!isNaN(num)) {
-      setMaxPriceInput(Math.max(num, minPriceInput));
-    }
-  };
-
   const sidebarContent = (
     <aside
       className="w-full lg:w-72 flex-shrink-0"
@@ -100,7 +86,7 @@ export function CatalogFilters(_props: CatalogFiltersProps) {
 
         {renderFilterSection(
           t("home.catalog.filters.collections"),
-          <div className="space-y-2 max-h-60 overflow-y-auto px-2 collections-filter">
+          <div className="space-y-2 max-h-60 overflow-y-auto px-2 checkbox-filter">
             {categories.map(({ category, count }) => (
               <label
                 key={category}
@@ -131,23 +117,7 @@ export function CatalogFilters(_props: CatalogFiltersProps) {
 
         {renderFilterSection(
           t("home.catalog.filters.priceRange"),
-          <div className="space-y-4">
-            <div className="flex items-center justify-between text-sm">
-              <span className="text-muted-foreground">
-                {t("home.catalog.filters.minPrice")}
-              </span>
-              <span className="font-medium text-foreground">
-                {minPriceInput.toFixed(4)} ETH
-              </span>
-            </div>
-            <div className="flex items-center justify-between text-sm">
-              <span className="font-medium text-foreground">
-                {maxPriceInput.toFixed(4)} ETH
-              </span>
-              <span className="text-muted-foreground">
-                {t("home.catalog.filters.maxPrice")}
-              </span>
-            </div>
+          <div className="space-y-4 pl-2">
             <Slider
               min={parseFloat(priceRange.min)}
               max={parseFloat(priceRange.max)}
@@ -159,39 +129,12 @@ export function CatalogFilters(_props: CatalogFiltersProps) {
               }}
               className="mb-4"
             />
-            <div className="grid grid-cols-2 gap-2">
-              <div>
-                <label className="block text-xs text-muted-foreground mb-1">
-                  {t("home.catalog.filters.minPrice")} (ETH)
-                </label>
-                <input
-                  type="number"
-                  step="0.001"
-                  min={parseFloat(priceRange.min)}
-                  max={maxPriceInput}
-                  value={minPriceInput.toFixed(4)}
-                  onChange={(e) => handleMinPriceChange(e.target.value)}
-                  className="w-full px-3 py-2 text-sm border border-input bg-background rounded-md focus:ring-2 focus:ring-ring focus:border-transparent"
-                  aria-label={t("home.catalog.filters.minPrice")}
-                />
-              </div>
-              <div>
-                <label className="block text-xs text-muted-foreground mb-1">
-                  {t("home.catalog.filters.maxPrice")} (ETH)
-                </label>
-                <input
-                  type="number"
-                  step="0.001"
-                  min={minPriceInput}
-                  max={parseFloat(priceRange.max)}
-                  value={maxPriceInput.toFixed(4)}
-                  onChange={(e) => handleMaxPriceChange(e.target.value)}
-                  className="w-full px-3 py-2 text-sm border border-input bg-background rounded-md focus:ring-2 focus:ring-ring focus:border-transparent"
-                  aria-label={t("home.catalog.filters.maxPrice")}
-                />
-              </div>
+            <div className="flex items-center justify-between text-sm">
+              <span className="text-foreground">
+                {`${t("nft.price")}: ${minPriceInput.toFixed(2)} - ${maxPriceInput.toFixed(2)} ETH`}
+              </span>
             </div>
-            <Button className="w-full" onClick={applyPriceInputs}>
+            <Button variant={"default"} onClick={applyPriceInputs}>
               {t("home.catalog.filters.apply")}
             </Button>
           </div>,
@@ -200,11 +143,15 @@ export function CatalogFilters(_props: CatalogFiltersProps) {
 
         {renderFilterSection(
           t("home.catalog.filters.network"),
-          <div className="space-y-2 pr-2">
+          <div className="space-y-2 px-2 checkbox-filter">
             {networks.map(({ network, count }) => (
               <label
                 key={network}
-                className="flex items-center gap-3 cursor-pointer group p-2 rounded-lg hover:bg-accent transition-colors"
+                className={`flex items-center gap-3 cursor-pointer group hover:bg-accent transition-colors ${
+                  searchParams.network === network
+                    ? "selected-option"
+                    : "option"
+                }`}
               >
                 <Checkbox
                   checked={searchParams.network === network}
@@ -212,7 +159,6 @@ export function CatalogFilters(_props: CatalogFiltersProps) {
                     handleNetworkChange(network, checked)
                   }
                   aria-label={`${network} (${count})`}
-                  className="text-primary"
                 />
                 <span className="text-sm flex-1 capitalize group-hover:text-foreground transition-colors">
                   {network}
