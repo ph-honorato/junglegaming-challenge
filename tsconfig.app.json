@@ -4,7 +4,7 @@
     "target": "es2023",
     "lib": ["ES2023", "DOM"],
     "module": "esnext",
-    "types": ["vite/client"],
+    "types": ["vite/client", "vitest", "@testing-library/jest-dom"],
     "allowArbitraryExtensions": true,
     "skipLibCheck": true,
     "moduleResolution": "bundler",
@@ -26,5 +26,6 @@
       "@mocks/*": ["./src/mocks/*"],
     }
   },
-  "include": ["src"]
+  "include": ["src", "src/vitest.d.ts"],
+  "exclude": ["src/**/*.test.tsx", "src/**/*.test.ts"]
 }
