@@ -66,7 +66,7 @@ export function CatalogSection({
 
               {/* Pagination */}
               {totalPages > 1 && (
-                <div className="mt-10 flex justify-center">
+                <div className="mt-10 flex justify-end">
                   <Pagination
                     currentPage={currentPage}
                     totalPages={totalPages}
