@@ -56,10 +56,10 @@ const mockNFTs = [
   },
 ]
 
-function renderWithProviders(items = mockNFTs) {
+function renderWithProviders(items = mockNFTs, className?: string) {
   return render(
     <I18nextProvider i18n={i18n}>
-      <HeroCarousel items={items} />
+      <HeroCarousel items={items} className={className} />
     </I18nextProvider>
   )
 }
@@ -89,22 +89,16 @@ describe("HeroCarousel", () => {
     expect(descriptions).toHaveLength(2) // One per slide
   })
 
-  it("renders primary CTA button", () => {
+  it("renders explore CTA button", () => {
     renderWithProviders()
-    const buttons = screen.getAllByRole("button", { name: /EXPLORAR AGORA/i })
+    const buttons = screen.getAllByRole("button", { name: /EXPLORAR/i })
     expect(buttons).toHaveLength(2) // One per slide
   })
 
-  it("renders secondary CTA button", () => {
+  it("does not render a secondary CTA button", () => {
     renderWithProviders()
-    const buttons = screen.getAllByRole("button", { name: /Saiba mais/i })
-    expect(buttons).toHaveLength(2) // One per slide
-  })
-
-  it("renders carousel navigation arrows", () => {
-    renderWithProviders()
-    expect(screen.getByLabelText(/Previous slide/i)).toBeInTheDocument()
-    expect(screen.getByLabelText(/Next slide/i)).toBeInTheDocument()
+    const buttons = screen.queryAllByRole("button", { name: /Saiba mais/i })
+    expect(buttons).toHaveLength(0)
   })
 
   it("renders carousel dot indicators", () => {
@@ -114,12 +108,13 @@ describe("HeroCarousel", () => {
   })
 
   it("applies custom className", () => {
-    const { container } = renderWithProviders()
+    const { container } = renderWithProviders(mockNFTs, "test-custom-class")
     const section = container.querySelector("section")
     expect(section).toHaveClass("relative")
-    expect(section).toHaveClass("py-20")
-    expect(section).toHaveClass("lg:py-32")
+    expect(section).toHaveClass("py-8")
+    expect(section).toHaveClass("lg:py-16")
     expect(section).toHaveClass("overflow-hidden")
+    expect(section).toHaveClass("test-custom-class")
   })
 
   it("handles empty items array", () => {

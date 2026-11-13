@@ -18,7 +18,7 @@ export const BLOG_POSTS: BlogPost[] = [
     readTime: 8,
     category: "Guia",
     slug: "identificar-nfts-valiosos",
-    image: "public/images/nfts/placeholder-1.svg",
+    image: "/images/nfts/placeholder-1.svg",
   },
   {
     title: "O Futuro dos Royalties: O Que Mudou em 2024",
@@ -28,7 +28,7 @@ export const BLOG_POSTS: BlogPost[] = [
     readTime: 12,
     category: "Análise",
     slug: "futuro-royalties-2024",
-    image: "public/images/nfts/placeholder-2.svg",
+    image: "/images/nfts/placeholder-2.svg",
   },
   {
     title: "Segurança no Web3: Protegendo Seus Ativos Digitais",
@@ -38,7 +38,7 @@ export const BLOG_POSTS: BlogPost[] = [
     readTime: 10,
     category: "Segurança",
     slug: "seguranca-web3",
-    image: "public/images/nfts/placeholder-3.svg",
+    image: "/images/nfts/placeholder-3.svg",
   },
   {
     title: "Tendências de Arte Generativa para 2025",
@@ -48,6 +48,6 @@ export const BLOG_POSTS: BlogPost[] = [
     readTime: 7,
     category: "Tendências",
     slug: "tendencias-arte-generativa-2025",
-    image: "public/images/nfts/placeholder-4.svg",
+    image: "/images/nfts/placeholder-4.svg",
   },
 ];
