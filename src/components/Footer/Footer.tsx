@@ -9,8 +9,8 @@ function FooterCard(props: {
   const { avatar, title, description } = props;
 
   return (
-    <div className="space-y-4">
-      <div className="w-12 h-12 rounded-full bg-primary text-primary-foreground font-bold flex items-center justify-center text-lg">
+    <div className="space-y-4 pr-8 border-r-1 border-current text-primary">
+      <div className="w-16 h-16 rounded-full bg-primary text-primary-foreground font-bold flex items-center justify-center text-lg">
         {avatar}
       </div>
       <h3 className="font-semibold text-base text-card-foreground tracking-wide">
@@ -26,10 +26,10 @@ function FooterCard(props: {
 export function Footer() {
   const { t } = useTranslation();
   return (
-    <footer className="w-full border-t border-border font-sans">
-      <div className="w-full bg-background max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8 py-16 lg:py-20 space-y-16">
+    <footer className="w-full font-sans mb-8">
+      <div className="w-full bg-surface max-w-[1200px]">
         {/* Cards Superiores (Segurança, Criadores, Alertas e Newsletter) */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 pb-12 border-b border-border">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 p-6">
           <FooterCard
             avatar="W"
             title={t("footer.features.walletSecurity")}
@@ -50,12 +50,9 @@ export function Footer() {
             <h3 className="font-semibold text-base text-card-foreground tracking-wide">
               {t("footer.newsletter.title")}
             </h3>
-            <p className="text-sm text-muted-foreground leading-relaxed">
-              {t("footer.newsletter.description")}
-            </p>
             <form
               onSubmit={(e) => e.preventDefault()}
-              className="flex items-center gap-2 pt-1"
+              className="flex items-center pt-1"
             >
               <Input
                 type="email"
@@ -69,31 +66,30 @@ export function Footer() {
                 {t("footer.newsletter.subscribe")}
               </Button>
             </form>
+            <p className="text-xs text-muted-foreground leading-relaxed">
+              {t("footer.newsletter.description")}
+            </p>
           </div>
         </div>
 
         {/* Marca e Links Rápidos de Contato */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-6 py-6 border-b border-border items-center text-sm">
+        <div className="bg-surface-dark grid grid-cols-1 md:grid-cols-4 gap-6 p-6 items-center text-sm">
           <div className="font-mono font-bold tracking-widest text-card-foreground text-base">
             {t("footer.info.brand")}
           </div>
-          <div className="text-muted-foreground">
-            {t("footer.info.tagline")}
-          </div>
-          <div className="text-muted-foreground">{t("footer.info.email")}</div>
-          <div className="text-muted-foreground font-mono">
-            {t("footer.info.phone")}
-          </div>
+          <div>{t("footer.info.tagline")}</div>
+          <div>{t("footer.info.email")}</div>
+          <div className=" font-mono">{t("footer.info.phone")}</div>
         </div>
 
         {/* Links de Navegação e Redes Sociais */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 pt-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 p-6">
           {/* Coluna 1: Meu perfil */}
           <div className="space-y-3">
             <h4 className="font-bold text-card-foreground text-sm tracking-wider">
               {t("footer.columns.profile")}
             </h4>
-            <ul className="space-y-2.5 text-sm text-muted-foreground">
+            <ul className="space-y-2.5 text-sm">
               <li>
                 <a
                   href="#"
@@ -142,7 +138,7 @@ export function Footer() {
             <h4 className="font-bold text-card-foreground text-sm tracking-wider">
               {t("footer.columns.help")}
             </h4>
-            <ul className="space-y-2.5 text-sm text-muted-foreground">
+            <ul className="space-y-2.5 text-sm">
               <li>
                 <a
                   href="#"
@@ -191,7 +187,7 @@ export function Footer() {
             <h4 className="font-bold text-card-foreground text-sm tracking-wider">
               {t("footer.columns.collections")}
             </h4>
-            <ul className="space-y-2.5 text-sm text-muted-foreground">
+            <ul className="space-y-2.5 text-sm">
               <li>
                 <a
                   href="#"
@@ -317,9 +313,9 @@ export function Footer() {
         </div>
 
         {/* Copyright final */}
-        <div className="pt-8 border-t border-border text-center text-xs text-muted-foreground tracking-wide">
-          {t("footer.copyright")}
-        </div>
+      </div>
+      <div className="w-full text-center text-xs tracking-wide p-6">
+        {t("footer.copyright")}
       </div>
     </footer>
   );
