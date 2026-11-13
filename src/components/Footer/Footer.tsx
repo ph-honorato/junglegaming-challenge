@@ -1,4 +1,3 @@
-// Footer Component
 import { Button, Input } from "@components";
 import { useTranslation } from "react-i18next";
 
@@ -28,7 +27,7 @@ export function Footer() {
   const { t } = useTranslation();
   return (
     <footer className="w-full border-t border-border font-sans">
-      <div className="w-full bg-background max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 lg:py-20 space-y-16">
+      <div className="w-full bg-background max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8 py-16 lg:py-20 space-y-16">
         {/* Cards Superiores (Segurança, Criadores, Alertas e Newsletter) */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 pb-12 border-b border-border">
           <FooterCard
