@@ -1,7 +1,8 @@
 import axios, { AxiosError } from "axios"
 import type { AxiosInstance, AxiosRequestConfig, InternalAxiosRequestConfig } from "axios"
 
-const API_BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:3001/api"
+// Use relative URL so MSW can intercept requests on the same origin
+const API_BASE_URL = import.meta.env.VITE_API_URL || ""
 
 class ApiClient {
   private client: AxiosInstance

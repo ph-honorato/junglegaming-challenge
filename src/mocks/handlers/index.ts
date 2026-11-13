@@ -1,2 +1,4 @@
-// Placeholder - handlers will be added in Phase 1+
-export const handlers: any[] = []
+// MSW Handlers - Main Export
+import { nftHandlers } from "./nfts"
+
+export const handlers = [...nftHandlers]
