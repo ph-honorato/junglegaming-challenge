@@ -2,7 +2,77 @@
   "home": {
     "title": "Página Inicial",
     "subtitle": "Descubra, colete e negocie ativos digitais únicos.",
-    "getStarted": "Começar"
+    "getStarted": "Começar",
+    "hero": {
+      "eyebrow": "Bem-vindo à Kurio",
+      "headline": "SEJA DONO DO FUTURO DA ARTE DIGITAL",
+      "description": "Descubra, colecione e negocie NFTs exclusivos dos melhores criadores do mundo. Sua jornada no metaverso começa aqui.",
+      "cta": "EXPLORAR AGORA",
+      "secondaryCta": "Saiba mais"
+    },
+    "catalog": {
+      "title": "Marketplace",
+      "subtitle": "Descubra NFTs exclusivos de artistas do mundo todo",
+      "itemsFound": "NFTs encontrados",
+      "tabs": {
+        "all": "Todos os NFTs",
+        "new": "Novos lançamentos",
+        "trending": "Em alta"
+      },
+      "sort": {
+        "label": "Ordenar por",
+        "recent": "Listados recentemente",
+        "priceAsc": "Menor preço",
+        "priceDesc": "Maior preço",
+        "popular": "Mais populares"
+      },
+      "filters": {
+        "title": "Filtros",
+        "collections": "Coleções",
+        "priceRange": "Faixa de preço",
+        "network": "Rede",
+        "apply": "Aplicar",
+        "clear": "Limpar",
+        "minPrice": "Mín",
+        "maxPrice": "Máx"
+      },
+      "featured": {
+        "label": "NFT EM DESTAQUE",
+        "subtitle": "OFERTA LIMITADA"
+      },
+      "showing": "Mostrando {{count}} NFTs"
+    },
+    "creators": {
+      "subtitle": "Conheça os artistas e coleções que estão moldando o futuro da arte digital",
+      "badge": "Criador Verificado",
+      "explore": "Explorar"
+    },
+    "learn": {
+      "title": "Diário da Cunhagem",
+      "subtitle": "Artigos, guias e análises sobre o universo NFT",
+      "readMore": "Ver todos os artigos",
+      "readTime": "{{time}} min de leitura"
+    },
+    "carousel": {
+      "previous": "Slide anterior",
+      "next": "Próximo slide",
+      "slides": "Slides",
+      "slide": "Slide"
+    }
+  },
+  "nft": {
+    "addToFavorites": "Adicionar aos favoritos",
+    "removeFromFavorites": "Remover dos favoritos",
+    "loading": "Carregando NFTs...",
+    "noResults": "Nenhum NFT encontrado",
+    "noResultsDesc": "Tente ajustar seus filtros ou termos de busca",
+    "catalog": "Catálogo de NFTs",
+    "price": "Preço",
+    "collection": "Coleção",
+    "creator": "Criador",
+    "edition": "Edição {{current}} de {{max}}",
+    "network": "Rede",
+    "category": "Categoria"
   },
   "common": {
     "loading": "Carregando...",
@@ -20,11 +90,70 @@
     "close": "Fechar",
     "back": "Voltar",
     "next": "Próximo",
-    "previous": "Anterior"
+    "previous": "Anterior",
+    "menu": "Menu",
+    "pagination": "Paginação",
+    "explore": "Explorar"
   },
   "navigation": {
     "home": "Início",
+    "marketplace": "Mercado",
+    "creators": "Criadores",
+    "learn": "Aprenda",
+    "favorites": "Favoritos",
+    "cart": "Carrinho",
+    "profile": "Perfil",
+    "login": "Entrar",
+    "logout": "Sair",
     "about": "Sobre",
     "contact": "Contato"
+  },
+  "footer": {
+    "features": {
+      "walletSecurity": "Segurança da carteira",
+      "walletSecurityDesc": "Proteja sua carteira e colecione arte digital verificada com confiança.",
+      "featuredCreators": "Criadores em destaque",
+      "featuredCreatorsDesc": "Conheça artistas, estúdios e comunidades que moldam a cultura digital na rede.",
+      "launchAlerts": "Alertas de lançamentos",
+      "launchAlertsDesc": "Receba calendários de cunhagem, novidades de listas de acesso e análises do mercado."
+    },
+    "newsletter": {
+      "title": "Antecipe-se ao próximo lançamento",
+      "description": "Receba lançamentos selecionados, histórias de criadores e novidades do mercado.",
+      "placeholder": "digite seu e-mail...",
+      "subscribe": "Enviar"
+    },
+    "info": {
+      "brand": "KURIO",
+      "tagline": "Feito para colecionadores, criadores e cultura",
+      "email": "contato@email.com",
+      "phone": "+55 11 4002 8922"
+    },
+    "columns": {
+      "profile": "Meu perfil",
+      "help": "Central de ajuda",
+      "collections": "Coleções",
+      "social": "Redes sociais"
+    },
+    "links": {
+      "profile": "Meu perfil",
+      "myCollection": "Minha coleção",
+      "activity": "Atividade",
+      "creatorStudio": "Estúdio do criador",
+      "wishlist": "Lista de interesse",
+      "helpCenter": "Central de ajuda",
+      "buyNfts": "Como comprar NFTs",
+      "walletSecurity": "Carteira e segurança",
+      "marketPolicy": "Política do mercado",
+      "reportItem": "Denunciar item",
+      "digitalArt": "Arte digital",
+      "photography": "Fotografia",
+      "music": "Música",
+      "art3d": "Arte 3D",
+      "utility": "Utilidade"
+    },
+    "walletsTitle": "Carteiras compatíveis",
+    "wallets": "METAMASK • WALLETCONNECT • COINBASE",
+    "copyright": "© 2026 Kurio. Propriedade digital para todos."
   }
 }
