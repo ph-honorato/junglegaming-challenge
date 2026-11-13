@@ -71,119 +71,130 @@ export function CatalogFilters(_props: CatalogFiltersProps) {
       className="w-full lg:w-72 flex-shrink-0"
       aria-label={t("home.catalog.filters.title")}
     >
-      <div className="sticky top-24 space-y-8 p-6 bg-card">
-        {/* Mobile close button */}
-        <div className="lg:hidden flex justify-end">
-          <Button
-            variant="ghost"
-            size="icon"
-            onClick={closeMobileFilters}
-            aria-label={t("common.close")}
-          >
-            <X className="h-5 w-5" />
-          </Button>
+      <div className="sticky top-24">
+        {/* Filters */}
+        <div className="bg-card space-y-8 p-6 mb-6">
+          {/* Mobile close button */}
+          <div className="lg:hidden flex justify-end">
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={closeMobileFilters}
+              aria-label={t("common.close")}
+            >
+              <X className="h-5 w-5" />
+            </Button>
+          </div>
+
+          {renderFilterSection(
+            t("home.catalog.filters.collections"),
+            <div className="space-y-2 max-h-60 overflow-y-auto px-2 checkbox-filter">
+              {categories.map(({ category, count }) => (
+                <label
+                  key={category}
+                  className={`flex items-center gap-3 cursor-pointer group hover:bg-accent transition-colors ${
+                    searchParams.category === category
+                      ? "selected-option"
+                      : "option"
+                  }`}
+                >
+                  <Checkbox
+                    checked={searchParams.category === category}
+                    onCheckedChange={(checked: boolean) =>
+                      handleCategoryChange(category, checked)
+                    }
+                    aria-label={`${category} (${count})`}
+                  />
+                  <span className="text-sm flex-1 truncate group-hover:text-foreground transition-colors">
+                    {category}
+                  </span>
+                  <span className="text-xs text-muted-foreground px-2 py-0.5 rounded-full font-medium">
+                    {`(${count})`}
+                  </span>
+                </label>
+              ))}
+            </div>,
+            "category",
+          )}
+
+          {renderFilterSection(
+            t("home.catalog.filters.priceRange"),
+            <div className="space-y-4 pl-2">
+              <Slider
+                min={parseFloat(priceRange.min)}
+                max={parseFloat(priceRange.max)}
+                step={0.001}
+                value={[minPriceInput, maxPriceInput]}
+                onValueChange={([min, max]) => {
+                  setMinPriceInput(min);
+                  setMaxPriceInput(max);
+                }}
+                className="mb-4"
+              />
+              <div className="flex items-center justify-between text-sm">
+                <span className="text-foreground">
+                  {`${t("nft.price")}: ${minPriceInput.toFixed(2)} - ${maxPriceInput.toFixed(2)} ETH`}
+                </span>
+              </div>
+              <Button variant={"default"} onClick={applyPriceInputs}>
+                {t("home.catalog.filters.apply")}
+              </Button>
+            </div>,
+            "minPrice",
+          )}
+
+          {renderFilterSection(
+            t("home.catalog.filters.network"),
+            <div className="space-y-2 px-2 checkbox-filter">
+              {networks.map(({ network, count }) => (
+                <label
+                  key={network}
+                  className={`flex items-center gap-3 cursor-pointer group hover:bg-accent transition-colors ${
+                    searchParams.network === network
+                      ? "selected-option"
+                      : "option"
+                  }`}
+                >
+                  <Checkbox
+                    checked={searchParams.network === network}
+                    onCheckedChange={(checked: boolean) =>
+                      handleNetworkChange(network, checked)
+                    }
+                    aria-label={`${network} (${count})`}
+                  />
+                  <span className="text-sm flex-1 capitalize group-hover:text-foreground transition-colors">
+                    {network}
+                  </span>
+                  <span className="text-xs text-muted-foreground px-2 py-0.5 rounded-full font-medium">
+                    {`(${count})`}
+                  </span>
+                </label>
+              ))}
+            </div>,
+            "network",
+          )}
+
+          {hasActiveFilters && (
+            <Button
+              variant="outline"
+              className="w-full border-border hover:border-primary/50 hover:text-primary transition-colors"
+              onClick={clearFilters}
+            >
+              {t("home.catalog.filters.clear")}
+            </Button>
+          )}
         </div>
 
-        {renderFilterSection(
-          t("home.catalog.filters.collections"),
-          <div className="space-y-2 max-h-60 overflow-y-auto px-2 checkbox-filter">
-            {categories.map(({ category, count }) => (
-              <label
-                key={category}
-                className={`flex items-center gap-3 cursor-pointer group hover:bg-accent transition-colors ${
-                  searchParams.category === category
-                    ? "selected-option"
-                    : "option"
-                }`}
-              >
-                <Checkbox
-                  checked={searchParams.category === category}
-                  onCheckedChange={(checked: boolean) =>
-                    handleCategoryChange(category, checked)
-                  }
-                  aria-label={`${category} (${count})`}
-                />
-                <span className="text-sm flex-1 truncate group-hover:text-foreground transition-colors">
-                  {category}
-                </span>
-                <span className="text-xs text-muted-foreground bg-muted px-2 py-0.5 rounded-full font-medium">
-                  {`(${count})`}
-                </span>
-              </label>
-            ))}
-          </div>,
-          "category",
-        )}
-
-        {renderFilterSection(
-          t("home.catalog.filters.priceRange"),
-          <div className="space-y-4 pl-2">
-            <Slider
-              min={parseFloat(priceRange.min)}
-              max={parseFloat(priceRange.max)}
-              step={0.001}
-              value={[minPriceInput, maxPriceInput]}
-              onValueChange={([min, max]) => {
-                setMinPriceInput(min);
-                setMaxPriceInput(max);
-              }}
-              className="mb-4"
-            />
-            <div className="flex items-center justify-between text-sm">
-              <span className="text-foreground">
-                {`${t("nft.price")}: ${minPriceInput.toFixed(2)} - ${maxPriceInput.toFixed(2)} ETH`}
-              </span>
-            </div>
-            <Button variant={"default"} onClick={applyPriceInputs}>
-              {t("home.catalog.filters.apply")}
-            </Button>
-          </div>,
-          "minPrice",
-        )}
-
-        {renderFilterSection(
-          t("home.catalog.filters.network"),
-          <div className="space-y-2 px-2 checkbox-filter">
-            {networks.map(({ network, count }) => (
-              <label
-                key={network}
-                className={`flex items-center gap-3 cursor-pointer group hover:bg-accent transition-colors ${
-                  searchParams.network === network
-                    ? "selected-option"
-                    : "option"
-                }`}
-              >
-                <Checkbox
-                  checked={searchParams.network === network}
-                  onCheckedChange={(checked: boolean) =>
-                    handleNetworkChange(network, checked)
-                  }
-                  aria-label={`${network} (${count})`}
-                />
-                <span className="text-sm flex-1 capitalize group-hover:text-foreground transition-colors">
-                  {network}
-                </span>
-                <span className="text-xs text-muted-foreground bg-muted px-2 py-0.5 rounded-full font-medium">
-                  {count}
-                </span>
-              </label>
-            ))}
-          </div>,
-          "network",
-        )}
-
         {/* Featured NFT Promo Card matching Figma */}
-        <div className="pt-2">
-          <p className="text-primary text-xs font-bold uppercase tracking-wider mb-1">
-            {t("home.catalog.featured.label", {
-              defaultValue: "NFT EM DESTAQUE",
-            })}
-          </p>
-          <h4 className="text-foreground text-sm font-bold uppercase tracking-wider mb-3">
-            {t("home.catalog.featured.subtitle", {
-              defaultValue: "OFERTA LIMITADA",
-            })}
-          </h4>
+        <div className="bg-card pt-2">
+          <div className="my-2 ml-6">
+            <p className="text-primary text-lg font-bold uppercase tracking-wider mb-2">
+              {t("home.catalog.featured.label")}
+            </p>
+            <h4 className="text-foreground text-lg font-bold uppercase tracking-wider ml-2">
+              {t("home.catalog.featured.subtitle")}
+            </h4>
+          </div>
           <div className="rounded-2xl overflow-hidden border border-border bg-card shadow-lg">
             <img
               src="/images/nfts/placeholder-2.svg"
@@ -193,29 +204,6 @@ export function CatalogFilters(_props: CatalogFiltersProps) {
             />
           </div>
         </div>
-
-        {hasActiveFilters && (
-          <Button
-            variant="outline"
-            className="w-full border-border hover:border-primary/50 hover:text-primary transition-colors"
-            onClick={clearFilters}
-          >
-            <svg
-              className="mr-2 h-4 w-4"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M6 18L18 6M6 6l12 12"
-              />
-            </svg>
-            {t("home.catalog.filters.clear")}
-          </Button>
-        )}
       </div>
     </aside>
   );
