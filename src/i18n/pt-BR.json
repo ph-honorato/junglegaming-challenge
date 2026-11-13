@@ -59,6 +59,7 @@
   "nft": {
     "addToFavorites": "Adicionar aos favoritos",
     "removeFromFavorites": "Remover dos favoritos",
+    "viewDetails": "Ver detalhes de {{name}}",
     "loading": "Carregando NFTs...",
     "noResults": "Nenhum NFT encontrado",
     "noResultsDesc": "Tente ajustar seus filtros ou termos de busca",

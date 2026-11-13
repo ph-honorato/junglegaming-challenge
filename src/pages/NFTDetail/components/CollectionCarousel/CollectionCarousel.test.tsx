@@ -1,8 +1,16 @@
 // CollectionCarousel Unit Tests
-import { render, screen } from "@testing-library/react";
+import { render, screen, waitFor } from "@testing-library/react";
 import { describe, it, expect, vi } from "vitest";
 import "@testing-library/jest-dom";
 import { I18nextProvider } from "react-i18next";
+import {
+  Outlet,
+  createMemoryHistory,
+  createRootRoute,
+  createRoute,
+  createRouter,
+  RouterProvider,
+} from "@tanstack/react-router";
 import i18n from "@/i18n";
 
 vi.mock("@/hooks/useNFTs", () => ({
@@ -50,11 +58,28 @@ function mockUseNFTs(result: {
   (useNFTs as unknown as ReturnType<typeof vi.fn>).mockReturnValue(result);
 }
 
+// NFTCard now renders a router Link, so the tree needs a router context
 function renderComponent() {
+  const rootRoute = createRootRoute({ component: () => <Outlet /> });
+  const indexRoute = createRoute({
+    getParentRoute: () => rootRoute,
+    path: "/",
+    component: () => <CollectionCarousel collection="Cosmic Bloom" />,
+  });
+  const nftRoute = createRoute({
+    getParentRoute: () => rootRoute,
+    path: "/nft/$id",
+    component: () => null,
+  });
+  const router = createRouter({
+    routeTree: rootRoute.addChildren([indexRoute, nftRoute]),
+    history: createMemoryHistory({ initialEntries: ["/"] }),
+  });
+
   return render(
     <I18nextProvider i18n={i18n}>
-      <CollectionCarousel collection="Cosmic Bloom" />
-    </I18nextProvider>
+      <RouterProvider router={router} />
+    </I18nextProvider>,
   );
 }
 
@@ -72,19 +97,21 @@ describe("chunkIntoPages", () => {
 });
 
 describe("CollectionCarousel", () => {
-  it("fetches NFTs from the collection with a capped limit", () => {
+  it("fetches NFTs from the collection with a capped limit", async () => {
     mockUseNFTs({ data: { data: makeNFTs(), meta: mockMeta }, isLoading: false });
     renderComponent();
 
-    expect(useNFTs).toHaveBeenCalledWith({ collection: "Cosmic Bloom", limit: 15 });
+    await waitFor(() => {
+      expect(useNFTs).toHaveBeenCalledWith({ collection: "Cosmic Bloom", limit: 15 });
+    });
   });
 
-  it("renders the heading and every NFT card name across slides", () => {
+  it("renders the heading and every NFT card name across slides", async () => {
     mockUseNFTs({ data: { data: makeNFTs(), meta: mockMeta }, isLoading: false });
     renderComponent();
 
     expect(
-      screen.getByRole("heading", { level: 2, name: "Mais desta coleção" })
+      await screen.findByRole("heading", { level: 2, name: "Mais desta coleção" })
     ).toBeInTheDocument();
     // All slides stay in the DOM, so every name is visible to queries
     for (const name of NFT_NAMES) {
@@ -92,31 +119,34 @@ describe("CollectionCarousel", () => {
     }
   });
 
-  it("renders one dot indicator per page", () => {
+  it("renders one dot indicator per page", async () => {
     mockUseNFTs({ data: { data: makeNFTs(), meta: mockMeta }, isLoading: false });
     renderComponent();
 
-    const dots = screen.getAllByRole("tab");
+    const dots = await screen.findAllByRole("tab");
     expect(dots).toHaveLength(3);
   });
 
-  it("renders 5 skeleton cards while loading", () => {
+  it("renders 5 skeleton cards while loading", async () => {
     mockUseNFTs({ data: undefined, isLoading: true });
     renderComponent();
 
-    const status = screen.getByRole("status");
+    const status = await screen.findByRole("status");
     expect(status).toHaveAttribute("aria-label", "Carregando coleção...");
     expect(status).toHaveAttribute("aria-busy", "true");
     expect(status.children).toHaveLength(5);
   });
 
-  it("returns null when the collection has no NFTs and loading finished", () => {
+  it("returns null when the collection has no NFTs and loading finished", async () => {
     mockUseNFTs({
       data: { data: [], meta: { ...mockMeta, total: 0 } },
       isLoading: false,
     });
     const { container } = renderComponent();
 
+    await waitFor(() => {
+      expect(container.querySelector("h2")).toBeNull();
+    });
     expect(container.firstChild).toBeNull();
   });
 });
