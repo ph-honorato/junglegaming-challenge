@@ -16,7 +16,7 @@ import { useTranslation } from "react-i18next";
 export function Header() {
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const search = useSearch({ from: "/" });
+  // const search = useSearch({ from: "/" });
   const [mobileMenuOpen, setMobileMenuOpen] = React.useState(false);
 
   const scrollToSection = (sectionId: string) => {
@@ -122,7 +122,7 @@ export function Header() {
               variant="ghost"
               size="icon"
               className="w-10 h-10 rounded-xl hover:bg-accent transition-colors"
-              onClick={() => navigateTo("/marketplace", { ...search, q: "" })}
+              // onClick={() => navigateTo("/marketplace", { ...search, q: "" })}
               aria-label={t("common.search")}
             >
               <Search className="h-5 w-5" />
@@ -207,9 +207,9 @@ export function Header() {
                 <Button
                   variant="outline"
                   className="w-full justify-start px-4 py-3 rounded-xl"
-                  onClick={() =>
-                    navigateTo("/marketplace", { ...search, q: "" })
-                  }
+                  // onClick={() =>
+                  //   navigateTo("/marketplace", { ...search, q: "" })
+                  // }
                 >
                   <Search className="mr-2 h-5 w-5" />
                   {t("common.search")}
