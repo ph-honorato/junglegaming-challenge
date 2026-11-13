@@ -1,0 +1,13 @@
+function ProfilePage() {
+  return (
+    <div className="py-12 lg:py-16">
+      <div className="text-center max-w-2xl mx-auto">
+        <h1 className="text-4xl md:text-6xl font-bold tracking-tight mb-6">
+          Profile
+        </h1>
+      </div>
+    </div>
+  )
+}
+
+export default ProfilePage
