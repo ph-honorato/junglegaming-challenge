@@ -40,7 +40,7 @@ function CreatorBanner(props: CreatorBannerProps) {
             asChild
           >
             <Link to={href} className="flex items-center gap-2">
-              {t("home.creators.explore")}
+              {t("common.explore")}
               <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
             </Link>
           </Button>

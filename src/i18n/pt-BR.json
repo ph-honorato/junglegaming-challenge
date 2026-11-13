@@ -6,9 +6,7 @@
     "hero": {
       "eyebrow": "Bem-vindo à Kurio",
       "headline": "SEJA DONO DO FUTURO DA ARTE DIGITAL",
-      "description": "Descubra, colecione e negocie NFTs exclusivos dos melhores criadores do mundo. Sua jornada no metaverso começa aqui.",
-      "cta": "EXPLORAR AGORA",
-      "secondaryCta": "Saiba mais"
+      "description": "Descubra, colecione e negocie NFTs exclusivos dos melhores criadores do mundo. Sua jornada no metaverso começa aqui."
     },
     "catalog": {
       "title": "Marketplace",
@@ -44,8 +42,7 @@
     },
     "creators": {
       "subtitle": "Conheça os artistas e coleções que estão moldando o futuro da arte digital",
-      "badge": "Criador Verificado",
-      "explore": "Explorar"
+      "badge": "Criador Verificado"
     },
     "learn": {
       "title": "Diário da Cunhagem",
