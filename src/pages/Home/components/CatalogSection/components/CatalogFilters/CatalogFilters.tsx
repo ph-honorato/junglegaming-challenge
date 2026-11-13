@@ -28,16 +28,12 @@ export function CatalogFilters(_props: CatalogFiltersProps) {
 
   const renderFilterSection = (
     title: string,
-    icon: React.ReactNode,
     children: React.ReactNode,
     filterKey: keyof typeof searchParams,
   ) => (
-    <div className="border-b border-border pb-6 last:border-0 last:pb-0">
-      <div className="flex items-center justify-between mb-4">
-        <h3 className="font-semibold flex items-center gap-2">
-          {icon}
-          {title}
-        </h3>
+    <div className="border-border last:border-0 last:pb-0">
+      <div className="flex items-center justify-between mb-2">
+        <h3 className="font-semibold flex items-center">{title}</h3>
         {searchParams[filterKey] && (
           <Button
             variant="ghost"
@@ -89,7 +85,7 @@ export function CatalogFilters(_props: CatalogFiltersProps) {
       className="w-full lg:w-72 flex-shrink-0"
       aria-label={t("home.catalog.filters.title")}
     >
-      <div className="sticky top-24 space-y-8 p-6 bg-card border border-border rounded-xl">
+      <div className="sticky top-24 space-y-8 p-6 bg-card">
         {/* Mobile close button */}
         <div className="lg:hidden flex justify-end">
           <Button
@@ -104,12 +100,15 @@ export function CatalogFilters(_props: CatalogFiltersProps) {
 
         {renderFilterSection(
           t("home.catalog.filters.collections"),
-          <Filter className="h-4 w-4" />,
-          <div className="space-y-2 max-h-60 overflow-y-auto pr-2">
+          <div className="space-y-2 max-h-60 overflow-y-auto px-2 collections-filter">
             {categories.map(({ category, count }) => (
               <label
                 key={category}
-                className="flex items-center gap-3 cursor-pointer group p-2 rounded-lg hover:bg-accent transition-colors"
+                className={`flex items-center gap-3 cursor-pointer group hover:bg-accent transition-colors ${
+                  searchParams.category === category
+                    ? "selected-option"
+                    : "option"
+                }`}
               >
                 <Checkbox
                   checked={searchParams.category === category}
@@ -117,13 +116,12 @@ export function CatalogFilters(_props: CatalogFiltersProps) {
                     handleCategoryChange(category, checked)
                   }
                   aria-label={`${category} (${count})`}
-                  className="text-primary"
                 />
                 <span className="text-sm flex-1 truncate group-hover:text-foreground transition-colors">
                   {category}
                 </span>
                 <span className="text-xs text-muted-foreground bg-muted px-2 py-0.5 rounded-full font-medium">
-                  {count}
+                  {`(${count})`}
                 </span>
               </label>
             ))}
@@ -133,7 +131,6 @@ export function CatalogFilters(_props: CatalogFiltersProps) {
 
         {renderFilterSection(
           t("home.catalog.filters.priceRange"),
-          <Filter className="h-4 w-4" />,
           <div className="space-y-4">
             <div className="flex items-center justify-between text-sm">
               <span className="text-muted-foreground">
@@ -203,7 +200,6 @@ export function CatalogFilters(_props: CatalogFiltersProps) {
 
         {renderFilterSection(
           t("home.catalog.filters.network"),
-          <Filter className="h-4 w-4" />,
           <div className="space-y-2 pr-2">
             {networks.map(({ network, count }) => (
               <label

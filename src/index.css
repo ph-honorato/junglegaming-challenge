@@ -131,6 +131,20 @@ ol {
   outline-offset: 2px;
 }
 
+.collections-filter {
+  .option {
+    color: var(--color-secondary);
+  }
+
+  .selected-option {
+    color: var(--color-primary);
+  }
+
+  button {
+    display: none;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
