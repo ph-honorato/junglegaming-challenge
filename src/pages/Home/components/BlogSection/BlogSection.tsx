@@ -9,12 +9,8 @@ export function BlogSection() {
   const { t } = useTranslation();
 
   return (
-    <section
-      id="blog"
-      aria-labelledby="blog-heading"
-      className="py-16 lg:py-24"
-    >
-      <div className="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8">
+    <section id="blog" aria-labelledby="blog-heading" className="py-16">
+      <div className="max-w-[1200px] mx-auto px-4 sm:px-6 py-8 lg:py-16">
         <div className="text-center mb-12">
           <h2
             id="blog-heading"
@@ -37,17 +33,17 @@ export function BlogSection() {
               to={`/blog/${post.slug}`}
               className="group h-full flex flex-col"
             >
-              <Card className="h-full overflow-hidden transition-all duration-300 hover:shadow-xl hover:-translate-y-1 bg-card border-border hover:border-primary/40 rounded-2xl p-3 flex flex-col justify-between">
-                <div>
-                  <div className="relative aspect-[4/3] overflow-hidden rounded-xl bg-muted mb-3">
-                    <img
-                      src={post.image}
-                      alt=""
-                      className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-                      aria-hidden="true"
-                      loading="lazy"
-                    />
-                  </div>
+              <Card className="h-full overflow-hidden transition-all duration-300 hover:shadow-xl hover:-translate-y-1 bg-card border-border hover:border-primary/40 rounded-2xl flex flex-col justify-between">
+                <div className="relative aspect-[4/3] overflow-hidden rounded-xl bg-muted mb-3">
+                  <img
+                    src={post.image}
+                    alt=""
+                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                    aria-hidden="true"
+                    loading="lazy"
+                  />
+                </div>
+                <div className="p-3">
                   <div className="text-xs text-muted-foreground mb-2 flex items-center gap-1">
                     <span>
                       {new Date(post.date).toLocaleDateString("pt-BR", {
@@ -69,11 +65,11 @@ export function BlogSection() {
                   <p className="text-xs text-muted-foreground line-clamp-2 leading-relaxed mb-4">
                     {post.excerpt}
                   </p>
+                  <span className="text-xs font-semibold text-primary flex items-center gap-1 mt-auto group-hover:underline">
+                    {t("home.learn.readMore", { defaultValue: "Ler mais" })}
+                    <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-1" />
+                  </span>
                 </div>
-                <span className="text-xs font-semibold text-primary flex items-center gap-1 mt-auto group-hover:underline">
-                  {t("home.learn.readMore", { defaultValue: "Ler mais" })}
-                  <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-1" />
-                </span>
               </Card>
             </Link>
           ))}

@@ -96,23 +96,15 @@ body {
   color: var(--color-common-white);
 }
 
-a {
-  color: inherit;
-  text-decoration: none;
-}
-
-button {
-  font-family: inherit;
-  cursor: pointer;
-  border: none;
-  background: none;
-}
-
 input,
 textarea,
 select {
   font-family: inherit;
   font-size: inherit;
+}
+
+button {
+  cursor: pointer;
 }
 
 img {
@@ -129,6 +121,20 @@ ol {
 :focus-visible {
   outline: 2px solid var(--color-primary);
   outline-offset: 2px;
+}
+
+.checkbox-filter {
+  .option {
+    color: var(--color-secondary);
+  }
+
+  .selected-option {
+    color: var(--color-primary);
+  }
+
+  button {
+    display: none;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
