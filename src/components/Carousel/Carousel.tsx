@@ -1,6 +1,4 @@
-import { ChevronLeft, ChevronRight } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { Button } from "../ui";
 import * as React from "react";
 
 export interface CarouselProps<T> {
@@ -19,7 +17,6 @@ export function Carousel<T>({
   className,
   autoplay = false,
   interval = 5000,
-  showArrows = true,
   showDots = true,
 }: CarouselProps<T>) {
   const [currentIndex, setCurrentIndex] = React.useState(0);
@@ -36,16 +33,6 @@ export function Carousel<T>({
     }, interval);
     return () => clearInterval(timer);
   }, [autoplay, interval, items.length]);
-
-  const goToNext = () => {
-    setDirection("next");
-    setCurrentIndex((prev) => (prev + 1) % items.length);
-  };
-
-  const goToPrev = () => {
-    setDirection("prev");
-    setCurrentIndex((prev) => (prev - 1 + items.length) % items.length);
-  };
 
   const goToSlide = (index: number) => {
     setDirection(index > currentIndex ? "next" : "prev");
@@ -70,34 +57,12 @@ export function Carousel<T>({
             className="flex-shrink-0 w-full"
             role="group"
             aria-roledescription="slide"
-            aria-label={`${index + 1} of ${items.length}`}
+            aria-label={`${index} of ${items.length}`}
           >
             {renderItem(item, index)}
           </div>
         ))}
       </div>
-      {showArrows && items.length > 1 && (
-        <>
-          <Button
-            variant="ghost"
-            size="icon"
-            className="absolute left-4 top-1/2 -translate-y-1/2 z-10 bg-background/50 hover:bg-background/80"
-            onClick={goToPrev}
-            aria-label="Previous slide"
-          >
-            <ChevronLeft className="h-6 w-6" />
-          </Button>
-          <Button
-            variant="ghost"
-            size="icon"
-            className="absolute right-4 top-1/2 -translate-y-1/2 z-10 bg-background/50 hover:bg-background/80"
-            onClick={goToNext}
-            aria-label="Next slide"
-          >
-            <ChevronRight className="h-6 w-6" />
-          </Button>
-        </>
-      )}
       {showDots && items.length > 1 && (
         <div
           className="absolute bottom-6 left-1/2 -translate-x-1/2 flex gap-2"
@@ -113,7 +78,7 @@ export function Carousel<T>({
               className={cn(
                 "w-2.5 h-2.5 rounded-full transition-all duration-300",
                 index === currentIndex
-                  ? "bg-foreground w-8"
+                  ? "bg-muted-foreground w-8"
                   : "bg-muted-foreground/50 hover:bg-muted-foreground",
               )}
               onClick={() => goToSlide(index)}

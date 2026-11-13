@@ -29,7 +29,7 @@ export function CatalogSection({
       <section
         id="catalog"
         aria-labelledby="catalog-heading"
-        className="py-8 lg:py-12"
+        className="py-8 lg:py-16"
       >
         <div className="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8">
           <h2 id="catalog-heading" className="sr-only">
@@ -66,7 +66,7 @@ export function CatalogSection({
 
               {/* Pagination */}
               {totalPages > 1 && (
-                <div className="mt-10 flex justify-center">
+                <div className="mt-10 flex justify-end">
                   <Pagination
                     currentPage={currentPage}
                     totalPages={totalPages}

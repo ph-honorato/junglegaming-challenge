@@ -59,7 +59,7 @@ export function HomePage() {
   return (
     <>
       {/* Hero Section */}
-      <HeroCarousel items={featuredData?.data || []} />
+      <HeroCarousel items={featuredData?.data.slice(0, 3) || []} />
 
       {/* Catalog Section */}
       <CatalogSection
