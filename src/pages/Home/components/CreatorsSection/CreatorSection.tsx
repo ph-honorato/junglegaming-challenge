@@ -12,7 +12,7 @@ function CreatorBanner(props: CreatorBannerProps) {
   const { t } = useTranslation();
 
   return (
-    <div className="bg-card border border-border rounded-2xl overflow-hidden flex flex-col sm:flex-row items-center p-4 gap-6 group hover:border-primary/40 transition-colors shadow-lg">
+    <div className="bg-card border border-border rounded-2xl overflow-hidden flex flex-col sm:flex-row items-center gap-6 group hover:border-primary/40 transition-colors shadow-lg">
       {/* Left Column: Image */}
       <div className="w-full sm:w-48 md:w-56 aspect-square rounded-xl overflow-hidden flex-shrink-0 bg-muted">
         <img
@@ -25,24 +25,26 @@ function CreatorBanner(props: CreatorBannerProps) {
       </div>
 
       {/* Right Column: Text & CTA */}
-      <div className="flex-1 flex flex-col justify-center py-2 text-left w-full">
+      <div className="flex-1 flex flex-col py-2 text-right w-full p-4">
         <h3 className="text-lg md:text-xl font-bold text-foreground mb-3 leading-snug">
           {title}
         </h3>
         <p className="text-xs md:text-sm text-muted-foreground mb-6 leading-relaxed">
           {description}
         </p>
-        <Button
-          variant="default"
-          size="sm"
-          className="self-start bg-primary text-primary-foreground hover:bg-primary/90 font-medium px-4 py-2 text-xs md:text-sm rounded-lg shadow-sm"
-          asChild
-        >
-          <Link to={href} className="flex items-center gap-2">
-            {t("home.creators.explore")}
-            <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
-          </Link>
-        </Button>
+        <span>
+          <Button
+            variant="default"
+            size="sm"
+            className="self-start bg-primary text-primary-foreground hover:bg-primary/90 font-medium px-4 py-2 text-xs md:text-sm rounded-lg shadow-sm"
+            asChild
+          >
+            <Link to={href} className="flex items-center gap-2">
+              {t("home.creators.explore")}
+              <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+            </Link>
+          </Button>
+        </span>
       </div>
     </div>
   );
