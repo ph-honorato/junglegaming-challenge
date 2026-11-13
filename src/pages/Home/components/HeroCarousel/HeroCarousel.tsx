@@ -84,7 +84,6 @@ export function HeroCarousel({
           renderItem={(item) => <HeroSlide item={item} t={t} />}
           autoplay={autoplay}
           interval={interval}
-          showArrows={true}
           showDots={true}
         />
       </div>
