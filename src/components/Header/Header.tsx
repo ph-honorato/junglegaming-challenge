@@ -1,6 +1,6 @@
 import * as React from "react";
 import { useNavigate, Link } from "@tanstack/react-router";
-import { Search, Heart, ShoppingCart, Menu, X } from "lucide-react";
+import { Search, Heart, ShoppingCart, Menu, X, LogIn } from "lucide-react";
 import {
   Button,
   NavigationMenu,
@@ -140,12 +140,12 @@ export function Header() {
 
             {/* Login */}
             <Button
-              variant="outline"
-              size="icon"
-              // className="relative w-10 h-10 rounded-xl hover:bg-accent transition-colors"
+              variant="default"
               onClick={() => navigateTo("/login")}
               aria-label={t("navigation.login")}
+              className="gap-2"
             >
+              <LogIn className="h-5 w-5" />
               {t("navigation.login")}
             </Button>
           </div>
