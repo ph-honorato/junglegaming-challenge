@@ -7,7 +7,6 @@ export interface CarouselProps<T> {
   className?: string;
   autoplay?: boolean;
   interval?: number;
-  showArrows?: boolean;
   showDots?: boolean;
 }
 
@@ -20,22 +19,23 @@ export function Carousel<T>({
   showDots = true,
 }: CarouselProps<T>) {
   const [currentIndex, setCurrentIndex] = React.useState(0);
-  const [direction, setDirection] = React.useState<"next" | "prev">("next");
   const itemsRef = React.useRef(items);
 
   itemsRef.current = items;
 
   React.useEffect(() => {
+    setCurrentIndex((prev) => (prev >= items.length ? 0 : prev));
+  }, [items.length]);
+
+  React.useEffect(() => {
     if (!autoplay || items.length <= 1) return;
     const timer = setInterval(() => {
-      setDirection("next");
       setCurrentIndex((prev) => (prev + 1) % itemsRef.current.length);
     }, interval);
     return () => clearInterval(timer);
   }, [autoplay, interval, items.length]);
 
   const goToSlide = (index: number) => {
-    setDirection(index > currentIndex ? "next" : "prev");
     setCurrentIndex(index);
   };
 
@@ -44,10 +44,7 @@ export function Carousel<T>({
   return (
     <div className={cn("relative overflow-hidden", className)}>
       <div
-        className={cn(
-          "flex transition-transform duration-700 ease-out",
-          direction === "next" ? "translate-x-[-100%]" : "translate-x-[100%]",
-        )}
+        className="flex transition-transform duration-700 ease-out"
         style={{ transform: `translateX(-${currentIndex * 100}%)` }}
         aria-roledescription="carousel"
       >
