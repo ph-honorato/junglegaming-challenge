@@ -95,7 +95,7 @@ export function HeroCarousel({
       id="hero"
       data-testid="hero-section"
       aria-labelledby="hero-heading"
-      className={cn("relative py-20 lg:py-32 overflow-hidden", className)}
+      className={cn("relative py-8 lg:py-16 overflow-hidden", className)}
     >
       <div className="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8">
         <Carousel
