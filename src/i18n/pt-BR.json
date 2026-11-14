@@ -59,6 +59,7 @@
   "nft": {
     "addToFavorites": "Adicionar aos favoritos",
     "removeFromFavorites": "Remover dos favoritos",
+    "viewDetails": "Ver detalhes de {{name}}",
     "loading": "Carregando NFTs...",
     "noResults": "Nenhum NFT encontrado",
     "noResultsDesc": "Tente ajustar seus filtros ou termos de busca",
@@ -69,6 +70,63 @@
     "edition": "Edição {{current}} de {{max}}",
     "network": "Rede",
     "category": "Categoria"
+  },
+  "nftDetail": {
+    "breadcrumb": {
+      "home": "Início",
+      "market": "Mercado"
+    },
+    "about": "Sobre este NFT:",
+    "edition": "Edição:",
+    "editionStatus": {
+      "aberta": "ABERTA",
+      "fechada": "FECHADA"
+    },
+    "quantity": "Quantidade",
+    "decreaseQuantity": "Diminuir quantidade",
+    "increaseQuantity": "Aumentar quantidade",
+    "buy": "COMPRAR",
+    "favorite": "Favoritar",
+    "tokenId": "ID do token",
+    "collection": "Coleção",
+    "attributes": "Atributos",
+    "share": "Compartilhar este NFT",
+    "shareLinkedin": "Compartilhar no LinkedIn",
+    "shareEmail": "Compartilhar por e-mail",
+    "shareTwitter": "Compartilhar no X (Twitter)",
+    "tabs": {
+      "details": "Detalhes do NFT",
+      "reviews": "Avaliações de colecionadores ({{count}})"
+    },
+    "network": "Rede:",
+    "networkMinted": "Cunhado na {{network}} com procedência imutável e metadados armazenados no IPFS.",
+    "contract": "Contrato:",
+    "contractInfo": "Direitos autorais do criador: {{royalties}}% nas vendas secundárias, pagos automaticamente pelos mercados compatíveis.",
+    "royalties": "Direitos autorais:",
+    "royaltiesInfo": "{{contract}} • Contrato inteligente {{standard}} verificado.",
+    "moreFromCollection": "Mais desta coleção",
+    "loading": "Carregando NFT...",
+    "galleryLabel": "Galeria de imagens do NFT",
+    "thumbnailLabel": "Ver imagem {{index}} de {{total}}",
+    "zoomImage": "Ampliar imagem",
+    "zoomDialogTitle": "Imagem ampliada de {{name}}",
+    "ratingLabel": "Avaliação média de {{rating}} de 5 estrelas",
+    "reviewsShort": "{{count}} avaliações de colecionadores",
+    "reviewsTitle": "Avaliações de colecionadores",
+    "reviewAvatar": "Avatar de {{user}}",
+    "reviewStars": "Nota {{rating}} de 5",
+    "reviewsEmpty": "Este NFT ainda não possui avaliações.",
+    "collectionLoading": "Carregando coleção...",
+    "notFound": {
+      "title": "NFT não encontrado",
+      "description": "O NFT que você procura não existe ou não está mais disponível no mercado.",
+      "backToMarket": "Voltar ao mercado"
+    },
+    "error": {
+      "title": "Não foi possível carregar o NFT",
+      "description": "Ocorreu um erro inesperado ao buscar os detalhes deste NFT.",
+      "retry": "Tentar novamente"
+    }
   },
   "common": {
     "loading": "Carregando...",
@@ -92,6 +150,7 @@
     "explore": "Explorar"
   },
   "navigation": {
+    "main": "Navegação principal",
     "home": "Início",
     "marketplace": "Mercado",
     "creators": "Criadores",

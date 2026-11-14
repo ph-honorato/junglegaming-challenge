@@ -7,6 +7,7 @@ export async function fetchNFTs(params: NFTListParams): Promise<NFTListResponse>
   const searchParams = new URLSearchParams()
   if (params.q) searchParams.set("q", params.q)
   if (params.category) searchParams.set("category", params.category)
+  if (params.collection) searchParams.set("collection", params.collection)
   if (params.minPrice) searchParams.set("minPrice", params.minPrice)
   if (params.maxPrice) searchParams.set("maxPrice", params.maxPrice)
   if (params.network) searchParams.set("network", params.network)
