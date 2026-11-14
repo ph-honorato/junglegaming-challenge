@@ -18,11 +18,11 @@ src/
 ├── api/                 # Funções de acesso à API (Axios)
 ├── components/          # Componentes compartilhados (Header, Footer, NFTCard, ...)
 │   └── ui/              # Componentes shadcn/ui
-├── hooks/               # useNFTs, useSocket, use-toast
+├── hooks/               # useNFTs, useCart, use-toast
 ├── i18n/                # Traduções (pt-BR)
-├── lib/                 # api (Axios), socket (Socket.IO), utils
+├── lib/                 # api (Axios), utils
 ├── mocks/               # MSW: browser, handlers, fixtures (data/nfts.ts)
-├── pages/               # Páginas (Home, NFTDetail, Cart, Checkout, ...)
+├── pages/               # Páginas (Home, NFTDetail, Cart, Login, ...)
 ├── routes/              # Rotas TanStack Router (file-based) + routeTree.gen.ts
 ├── test/                # Setup do Vitest
 └── types/               # Contratos de tipos (nft.ts)
@@ -34,23 +34,18 @@ public/                  # Assets (imagens dos NFTs, mockServiceWorker.js)
 
 ## Rotas
 
-| Rota         | Página                 | Estado          |
-| ------------ | ---------------------- | --------------- |
-| `/`          | Início (catálogo)      | ✅ Implementada |
-| `/nft/$id`   | Detalhe do NFT         | ✅ Implementada |
-| `/cart`      | Carrinho               | ⚠️ Stub         |
-| `/checkout`  | Pagamento              | ⚠️ Stub         |
-| `/order/$id` | Confirmação de pedido  | ⚠️ Stub         |
-| `/login`     | Login                  | ⚠️ Stub         |
-| `/register`  | Cadastro               | ⚠️ Stub         |
-| `/profile`   | Perfil do colecionador | ⚠️ Stub         |
-| `/wallets`   | Carteiras              | ⚠️ Stub         |
+| Rota       | Página                  |
+| ---------- | ----------------------- |
+| `/`        | Início (catálogo)       |
+| `/nft/$id` | Detalhe do NFT          |
+| `/cart`    | Carrinho                |
+| `/login`   | Login (sessão simulada) |
 
 ---
 
 ## Contratos REST
 
-**Implementado (NFTs)** — consumido em `src/api/nft.ts`, mockado em `src/mocks/handlers/nfts.ts`. Os handlers registram tanto `/api/nfts*` quanto `/nfts*`.
+**NFTs** — consumido em `src/api/nft.ts`, mockado em `src/mocks/handlers/nfts.ts`. Os handlers registram tanto `/api/nfts*` quanto `/nfts*`.
 
 | Método | Endpoint                                                                    | Descrição                                    | Resposta                                                                             |
 | ------ | --------------------------------------------------------------------------- | -------------------------------------------- | ------------------------------------------------------------------------------------ |
@@ -61,7 +56,19 @@ public/                  # Assets (imagens dos NFTs, mockServiceWorker.js)
 
 Erros: `5xx` (`{ message: "Internal Server Error" }`) e `404` (`{ message: "NFT not found" }`).
 
-**Recursos exigidos e ainda não implementados** (nota): Sessão/conta (cadastro, login, sessão, logout, expiração), Favoritos, Carrinho, Cotação (cupom/disponibilidade/taxas/total), Pedidos (criação idempotente + estado/recibo), Perfil e Carteiras. Também não há representação dos erros exigidos (validação, sessão inválida, falta de permissão, recurso inexistente, conflito de disponibilidade, falha transitória) nem chave de idempotência nos pedidos.
+**Carrinho** — consumido em `src/api/cart.ts`, mockado em `src/mocks/handlers/cart.ts` (estado do carrinho persistido em `localStorage`).
+
+| Método   | Endpoint                  | Descrição                             | Resposta               |
+| -------- | ------------------------- | ------------------------------------- | ---------------------- |
+| `GET`    | `/api/cart`               | Carrinho atual (itens + resumo).      | `CartResponse`         |
+| `POST`   | `/api/cart/items`         | Adiciona item (`nftId`, `quantity`).  | `201` + `CartResponse` |
+| `PATCH`  | `/api/cart/items/:itemId` | Atualiza a quantidade de um item.     | `CartResponse`         |
+| `DELETE` | `/api/cart/items/:itemId` | Remove um item.                       | `CartResponse`         |
+| `DELETE` | `/api/cart`               | Esvazia o carrinho (usado no logout). | `CartResponse`         |
+| `POST`   | `/api/cart/coupon`        | Aplica cupom (`KURIO10`, `LAUNCH5`).  | `CartResponse`         |
+| `DELETE` | `/api/cart/coupon`        | Remove o cupom aplicado.              | `CartResponse`         |
+
+Erros: `400` (`UNAVAILABLE_QUANTITY`, `INVALID_COUPON`), `404` (`NOT_FOUND`), `409` (`UNAVAILABLE_QUANTITY`) e `5xx` (`INTERNAL_ERROR`).
 
 ---
 
