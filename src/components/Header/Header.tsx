@@ -68,6 +68,7 @@ export function Header() {
             onClick={() => handleSectionNavigation("hero")}
             className="flex items-center gap-2 text-xl lg:text-2xl font-bold text-primary hover:opacity-80 transition-all duration-200 group"
             aria-label={t("navigation.home")}
+            data-testid="logo"
           >
             KURIO
           </button>
