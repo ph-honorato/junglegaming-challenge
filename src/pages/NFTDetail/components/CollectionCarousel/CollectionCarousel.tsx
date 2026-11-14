@@ -24,14 +24,17 @@ export function CollectionCarousel({ collection }: CollectionCarouselProps) {
           className="mt-6 grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-5"
         >
           {Array.from({ length: 5 }, (_, i) => (
-            <NFTCard key={"skeleton-" + i} nft={null as unknown as NFT} isLoading />
+            <NFTCard
+              key={"skeleton-" + i}
+              nft={null as unknown as NFT}
+              isLoading
+            />
           ))}
         </div>
       ) : (
         <Carousel
           className="mt-6 pb-12"
           items={pages}
-          showArrows={false}
           showDots
           renderItem={(page) => (
             <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-5">
