@@ -1,5 +1,5 @@
 import * as React from "react";
-import { useNavigate, Link } from "@tanstack/react-router";
+import { useLocation, useNavigate } from "@tanstack/react-router";
 import { Search, Heart, ShoppingCart, Menu, X, LogIn } from "lucide-react";
 import {
   Button,
@@ -15,15 +15,41 @@ import { useTranslation } from "react-i18next";
 export function Header() {
   const { t } = useTranslation();
   const navigate = useNavigate();
+  const location = useLocation();
   // const search = useSearch({ from: "/" });
   const [mobileMenuOpen, setMobileMenuOpen] = React.useState(false);
+  const [selectedSection, setSelectedSection] = React.useState<string>("");
 
   const scrollToSection = (sectionId: string) => {
     const element = document.getElementById(sectionId);
     if (element) {
       element.scrollIntoView({ behavior: "smooth" });
     }
+    setSelectedSection(sectionId);
+  };
+
+  // The home sections mount after the navigation commit, so retry within a few frames
+  const scrollToSectionWhenMounted = (sectionId: string, attempt = 0) => {
+    if (document.getElementById(sectionId)) {
+      scrollToSection(sectionId);
+      return;
+    }
+    if (attempt < 5) {
+      requestAnimationFrame(() =>
+        scrollToSectionWhenMounted(sectionId, attempt + 1),
+      );
+    }
+  };
+
+  // Navigates home first when coming from another page, then lands on the section
+  const handleSectionNavigation = async (sectionId: string) => {
     setMobileMenuOpen(false);
+    if (location.pathname !== "/") {
+      await navigate({ to: "/" });
+      scrollToSectionWhenMounted(sectionId);
+      return;
+    }
+    scrollToSection(sectionId);
   };
 
   const navigateTo = (
@@ -37,9 +63,9 @@ export function Header() {
     <header className="sticky top-0 z-50 w-full border-b border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 shadow-sm">
       <div className="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex h-16 lg:h-18 items-center justify-between">
-          {/* Logo - redirect to hero/Início */}
+          {/* Logo - go to home (Início section) */}
           <button
-            onClick={() => scrollToSection("hero")}
+            onClick={() => handleSectionNavigation("hero")}
             className="flex items-center gap-2 text-xl lg:text-2xl font-bold text-primary hover:opacity-80 transition-all duration-200 group"
             aria-label={t("navigation.home")}
           >
@@ -58,13 +84,13 @@ export function Header() {
                     asChild
                     className={navigationMenuTriggerStyle()}
                   >
-                    <Link
-                      to="#hero"
-                      onClick={() => scrollToSection("hero")}
-                      className="px-4 py-2"
+                    <button
+                      type="button"
+                      onClick={() => handleSectionNavigation("hero")}
+                      className={`navigation-buttons ${selectedSection === "hero" ? "section-selected" : ""}`}
                     >
                       {t("navigation.home")}
-                    </Link>
+                    </button>
                   </NavigationLink>
                 </NavigationMenuItem>
                 <NavigationMenuItem>
@@ -72,13 +98,13 @@ export function Header() {
                     asChild
                     className={navigationMenuTriggerStyle()}
                   >
-                    <Link
-                      to="#catalog"
-                      onClick={() => scrollToSection("catalog")}
-                      className="px-4 py-2"
+                    <button
+                      type="button"
+                      onClick={() => handleSectionNavigation("catalog")}
+                      className={`navigation-buttons ${selectedSection === "catalog" ? "section-selected" : ""}`}
                     >
                       {t("navigation.marketplace")}
-                    </Link>
+                    </button>
                   </NavigationLink>
                 </NavigationMenuItem>
                 <NavigationMenuItem>
@@ -86,13 +112,13 @@ export function Header() {
                     asChild
                     className={navigationMenuTriggerStyle()}
                   >
-                    <Link
-                      to="#creators"
-                      onClick={() => scrollToSection("creators")}
-                      className="px-4 py-2"
+                    <button
+                      type="button"
+                      onClick={() => handleSectionNavigation("creators")}
+                      className={`navigation-buttons ${selectedSection === "creators" ? "section-selected" : ""}`}
                     >
                       {t("navigation.creators")}
-                    </Link>
+                    </button>
                   </NavigationLink>
                 </NavigationMenuItem>
                 <NavigationMenuItem>
@@ -100,13 +126,13 @@ export function Header() {
                     asChild
                     className={navigationMenuTriggerStyle()}
                   >
-                    <Link
-                      to="#blog"
-                      onClick={() => scrollToSection("blog")}
-                      className="px-4 py-2"
+                    <button
+                      type="button"
+                      onClick={() => handleSectionNavigation("blog")}
+                      className={`navigation-buttons ${selectedSection === "blog" ? "section-selected" : ""}`}
                     >
                       {t("navigation.learn")}
-                    </Link>
+                    </button>
                   </NavigationLink>
                 </NavigationMenuItem>
               </NavigationMenuList>
@@ -180,25 +206,25 @@ export function Header() {
             >
               <button
                 className="w-full px-4 py-3 text-left text-lg font-medium rounded-xl hover:bg-accent transition-colors"
-                onClick={() => scrollToSection("hero")}
+                onClick={() => handleSectionNavigation("hero")}
               >
                 {t("navigation.home")}
               </button>
               <button
                 className="w-full px-4 py-3 text-left text-lg font-medium rounded-xl hover:bg-accent transition-colors"
-                onClick={() => scrollToSection("catalog")}
+                onClick={() => handleSectionNavigation("catalog")}
               >
                 {t("navigation.marketplace")}
               </button>
               <button
                 className="w-full px-4 py-3 text-left text-lg font-medium rounded-xl hover:bg-accent transition-colors"
-                onClick={() => scrollToSection("creators")}
+                onClick={() => handleSectionNavigation("creators")}
               >
                 {t("navigation.creators")}
               </button>
               <button
                 className="w-full px-4 py-3 text-left text-lg font-medium rounded-xl hover:bg-accent transition-colors"
-                onClick={() => scrollToSection("blog")}
+                onClick={() => handleSectionNavigation("blog")}
               >
                 {t("navigation.learn")}
               </button>

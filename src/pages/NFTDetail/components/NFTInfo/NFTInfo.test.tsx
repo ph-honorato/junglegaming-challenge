@@ -111,9 +111,11 @@ describe("NFTInfo", () => {
 
   it("renders token id, collection and attributes meta rows", () => {
     renderWithProviders()
-    expect(screen.getByText("#0042")).toBeInTheDocument()
-    expect(screen.getByText("Kurio Apes")).toBeInTheDocument()
-    expect(screen.getByText("Óculos, Esmeralda, Raro")).toBeInTheDocument()
+    expect(screen.getByText("ID do token: #0042")).toBeInTheDocument()
+    expect(screen.getByText("Coleção: Kurio Apes")).toBeInTheDocument()
+    expect(
+      screen.getByText("Atributos: Óculos, Esmeralda, Raro")
+    ).toBeInTheDocument()
   })
 
   it("renders share links with accessible names and correct hrefs", () => {

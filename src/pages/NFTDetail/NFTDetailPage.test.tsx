@@ -119,8 +119,7 @@ describe("NFTDetailPage", () => {
     expect(
       screen.getByText("19 avaliações de colecionadores"),
     ).toBeInTheDocument();
-    expect(screen.getByText("ID do token:")).toBeInTheDocument();
-    expect(screen.getByText("#0042")).toBeInTheDocument();
+    expect(screen.getByText("ID do token: #0042")).toBeInTheDocument();
   });
 
   it("renders the breadcrumb navigation", async () => {
