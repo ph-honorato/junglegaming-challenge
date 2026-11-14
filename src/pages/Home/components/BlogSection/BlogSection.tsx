@@ -1,5 +1,4 @@
 // BlogSection Component
-import { Link } from "@tanstack/react-router";
 import { ArrowRight } from "lucide-react";
 import { Card } from "@components";
 import { useTranslation } from "react-i18next";
@@ -28,9 +27,8 @@ export function BlogSection() {
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {BLOG_POSTS.map((post) => (
-            <Link
+            <div
               key={post.slug}
-              to={`/blog/${post.slug}`}
               className="group h-full flex flex-col"
             >
               <Card className="h-full overflow-hidden transition-all duration-300 hover:shadow-xl hover:-translate-y-1 bg-card border-border hover:border-primary/40 rounded-2xl flex flex-col justify-between">
@@ -71,7 +69,7 @@ export function BlogSection() {
                   </span>
                 </div>
               </Card>
-            </Link>
+            </div>
           ))}
         </div>
       </div>

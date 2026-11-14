@@ -11,6 +11,7 @@
     "catalog": {
       "title": "Marketplace",
       "subtitle": "Descubra NFTs exclusivos de artistas do mundo todo",
+      "searchPlaceholder": "Explorar coleções",
       "itemsFound": "NFTs encontrados",
       "tabs": {
         "all": "Todos os NFTs",
@@ -83,10 +84,12 @@
       "fechada": "FECHADA"
     },
     "quantity": "Quantidade",
+    "quantityShort": "Qtd.",
     "decreaseQuantity": "Diminuir quantidade",
     "increaseQuantity": "Aumentar quantidade",
     "buy": "COMPRAR",
     "buyError": "Não foi possível adicionar o NFT ao carrinho",
+    "buyNft": "Comprar NFT",
     "favorite": "Favoritar",
     "tokenId": "ID do token",
     "collection": "Coleção",

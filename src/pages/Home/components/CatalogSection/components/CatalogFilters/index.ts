@@ -1,2 +1,2 @@
 export { CatalogFilters } from "./CatalogFilters";
-export type { CatalogFiltersProps } from "./CatalogFilters.types";
+export type { FilterOption } from "./CatalogFilters.types";

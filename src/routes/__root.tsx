@@ -1,5 +1,4 @@
 import { createRootRoute, Outlet } from "@tanstack/react-router";
-import { TanStackRouterDevtools } from "@tanstack/router-devtools";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Header, Footer, Toaster } from "@components";
 import type { ReactNode } from "react";
@@ -41,7 +40,6 @@ export const Route = createRootRoute({
           <Outlet />
         </main>
         <Footer />
-        <TanStackRouterDevtools position="bottom-right" />
       </div>
     </Providers>
   ),

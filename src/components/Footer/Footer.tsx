@@ -9,7 +9,7 @@ function FooterCard(props: {
   const { avatar, title, description } = props;
 
   return (
-    <div className="space-y-4 pr-8 border-r-1 border-current text-primary">
+    <div className="space-y-4 pr-8 md:border-r-1 border-current text-primary">
       <div className="w-16 h-16 rounded-full bg-primary text-primary-foreground font-bold flex items-center justify-center text-lg">
         {avatar}
       </div>

@@ -92,7 +92,26 @@ describe("HeroCarousel", () => {
   it("renders explore CTA button", () => {
     renderWithProviders()
     const buttons = screen.getAllByRole("button", { name: /EXPLORAR/i })
-    expect(buttons).toHaveLength(2) // One per slide
+    expect(buttons).toHaveLength(4) // One mobile link + one desktop button per slide
+  })
+
+  it("renders mobile and desktop CTA variants separately", () => {
+    const { container } = renderWithProviders()
+    const mobileCtas = container.querySelectorAll(".lg\\:hidden")
+    const desktopCtas = container.querySelectorAll(".hidden.lg\\:flex")
+    expect(mobileCtas.length).toBeGreaterThan(0)
+    expect(desktopCtas.length).toBeGreaterThan(0)
+  })
+
+  it("renders slides as compact inline cards on mobile", () => {
+    const { container } = renderWithProviders()
+    const slideCards = container.querySelectorAll(".grid-cols-\\[1fr_auto\\]")
+    expect(slideCards).toHaveLength(2) // One per slide
+    slideCards.forEach((card) => {
+      expect(card).toHaveClass("bg-card")
+      expect(card).toHaveClass("rounded-2xl")
+      expect(card).toHaveClass("lg:grid-cols-12")
+    })
   })
 
   it("does not render a secondary CTA button", () => {
