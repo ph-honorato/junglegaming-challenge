@@ -4,6 +4,8 @@ import { useTranslation } from "react-i18next";
 
 import { Button } from "@components";
 import { useAuth } from "@/contexts/AuthContext";
+import { useAddCartItem } from "@/hooks/useCart";
+import { useToast } from "@/hooks/use-toast";
 
 import { useNFTInfo } from "./NFTInfo.hook";
 import type { NFTInfoProps } from "./NFTInfo.types";
@@ -38,15 +40,8 @@ function XIcon() {
 export function NFTInfo({ nft }: NFTInfoProps) {
   const { t } = useTranslation();
   const navigate = useNavigate();
+  const { toast } = useToast();
   const { isLogged } = useAuth();
-
-  const handleBuy = () => {
-    if (isLogged) {
-      navigate({ to: "/cart" });
-    } else {
-      navigate({ to: "/login", search: { redirect: "/cart" } });
-    }
-  };
   const {
     quantity,
     increaseQuantity,
@@ -56,6 +51,25 @@ export function NFTInfo({ nft }: NFTInfoProps) {
     selectedEditionIndex,
     selectEdition,
   } = useNFTInfo(nft);
+  const { mutate: addItem, isPending: isAdding } = useAddCartItem();
+
+  const handleBuy = () => {
+    if (!isLogged) {
+      navigate({ to: "/login", search: { redirect: "/cart" } });
+      return;
+    }
+    addItem(
+      { nftId: nft.id, quantity },
+      {
+        onSuccess: () => navigate({ to: "/cart" }),
+        onError: () =>
+          toast({
+            title: t("nftDetail.buyError"),
+            variant: "destructive",
+          }),
+      },
+    );
+  };
 
   const rating = Math.round(nft.rating ?? 0);
   const shareUrl = typeof window !== "undefined" ? window.location.href : "";
@@ -168,6 +182,7 @@ export function NFTInfo({ nft }: NFTInfoProps) {
           <Button
             className="h-11 rounded-lg bg-primary px-8 text-sm font-bold tracking-wide text-primary-foreground hover:bg-primary/90"
             onClick={handleBuy}
+            disabled={isAdding}
           >
             {t("nftDetail.buy")}
           </Button>

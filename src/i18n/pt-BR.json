@@ -86,6 +86,7 @@
     "decreaseQuantity": "Diminuir quantidade",
     "increaseQuantity": "Aumentar quantidade",
     "buy": "COMPRAR",
+    "buyError": "Não foi possível adicionar o NFT ao carrinho",
     "favorite": "Favoritar",
     "tokenId": "ID do token",
     "collection": "Coleção",
