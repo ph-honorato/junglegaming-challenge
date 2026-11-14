@@ -11,6 +11,7 @@
     "catalog": {
       "title": "Marketplace",
       "subtitle": "Descubra NFTs exclusivos de artistas do mundo todo",
+      "searchPlaceholder": "Explorar coleções",
       "itemsFound": "NFTs encontrados",
       "tabs": {
         "all": "Todos os NFTs",

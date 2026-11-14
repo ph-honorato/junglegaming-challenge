@@ -94,6 +94,7 @@ function catalogReducer(
 
 interface CatalogContextValue extends CatalogState {
   // Actions
+  setQuery: (q: string | undefined) => void;
   setCategory: (category: string | undefined) => void;
   setNetwork: (network: string | undefined) => void;
   setPriceRange: (min: number | undefined, max: number | undefined) => void;
@@ -198,6 +199,10 @@ export function CatalogProvider({
     });
   };
 
+  const setQuery = (q: string | undefined) => {
+    updateSearchParams({ q, page: 1 });
+  };
+
   const setCategory = (category: string | undefined) => {
     updateSearchParams({ category, page: 1 });
   };
@@ -276,6 +281,7 @@ export function CatalogProvider({
     <CatalogContext.Provider
       value={{
         ...state,
+        setQuery,
         setCategory,
         setNetwork,
         setPriceRange,
