@@ -44,7 +44,10 @@ export function NFTCard({
     : 0;
 
   return (
-    <Card className="group relative h-full flex flex-col overflow-hidden transition-all duration-300 hover:shadow-xl hover:-translate-y-1 bg-card border-border hover:border-primary/40 p-3">
+    <Card
+      className="group relative h-full flex flex-col overflow-hidden transition-all duration-300 hover:shadow-xl hover:-translate-y-1 bg-card border-border hover:border-primary/40 p-3"
+      data-testid="nft-card"
+    >
       {/* Image Container with rounded corners */}
       <div className="relative aspect-square overflow-hidden rounded-xl bg-muted mb-3">
         {!imageLoaded && (

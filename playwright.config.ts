@@ -1,4 +1,4 @@
-import { defineConfig, devices } from "@playwright/test"
+import { defineConfig, devices } from "@playwright/test";
 
 export default defineConfig({
   testDir: "./e2e",
@@ -44,4 +44,4 @@ export default defineConfig({
   },
   snapshotDir: "./e2e/snapshots",
   snapshotPathTemplate: "{snapshotDir}/{testFilePath}/{arg}{ext}",
-})
+});
