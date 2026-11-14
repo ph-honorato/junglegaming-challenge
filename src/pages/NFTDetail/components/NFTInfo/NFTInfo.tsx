@@ -4,6 +4,9 @@ import { useTranslation } from "react-i18next";
 
 import { Button } from "@components";
 import { useAuth } from "@/contexts/AuthContext";
+import { useAddCartItem } from "@/hooks/useCart";
+import { useToast } from "@/hooks/use-toast";
+import { savePendingPurchase } from "@/lib/pendingPurchase";
 
 import { useNFTInfo } from "./NFTInfo.hook";
 import type { NFTInfoProps } from "./NFTInfo.types";
@@ -38,15 +41,9 @@ function XIcon() {
 export function NFTInfo({ nft }: NFTInfoProps) {
   const { t } = useTranslation();
   const navigate = useNavigate();
+  const { toast } = useToast();
   const { isLogged } = useAuth();
 
-  const handleBuy = () => {
-    if (isLogged) {
-      navigate({ to: "/cart" });
-    } else {
-      navigate({ to: "/login", search: { redirect: "/cart" } });
-    }
-  };
   const handleOpenCart = () => {
     navigate({ to: "/cart" });
   };
@@ -59,6 +56,27 @@ export function NFTInfo({ nft }: NFTInfoProps) {
     selectedEditionIndex,
     selectEdition,
   } = useNFTInfo(nft);
+  const { mutate: addItem, isPending: isAdding } = useAddCartItem();
+
+  const handleBuy = () => {
+    if (!isLogged) {
+      // Stash the intended purchase so the login flow can complete it
+      savePendingPurchase({ nftId: nft.id, quantity });
+      navigate({ to: "/login", search: { redirect: "/cart" } });
+      return;
+    }
+    addItem(
+      { nftId: nft.id, quantity },
+      {
+        onSuccess: () => navigate({ to: "/cart" }),
+        onError: () =>
+          toast({
+            title: t("nftDetail.buyError"),
+            variant: "destructive",
+          }),
+      },
+    );
+  };
 
   const rating = Math.round(nft.rating ?? 0);
   const ratingValue = Number(nft.rating ?? 0);
@@ -98,7 +116,11 @@ export function NFTInfo({ nft }: NFTInfoProps) {
           {Number(nft.price).toFixed(2)} ETH
         </p>
         <div className="flex items-center gap-2">
-          <div role="img" aria-label={ratingAriaLabel} className="flex items-center gap-0.5">
+          <div
+            role="img"
+            aria-label={ratingAriaLabel}
+            className="flex items-center gap-0.5"
+          >
             {[0, 1, 2, 3, 4].map((index) => (
               <Star
                 key={index}
@@ -191,6 +213,7 @@ export function NFTInfo({ nft }: NFTInfoProps) {
           <Button
             className="h-11 rounded-lg bg-primary px-8 text-sm font-bold tracking-wide text-primary-foreground hover:bg-primary/90"
             onClick={handleBuy}
+            disabled={isAdding}
           >
             {t("nftDetail.buy")}
           </Button>
