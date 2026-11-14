@@ -145,7 +145,9 @@ export function NFTDetailPage() {
             </BreadcrumbItem>
             <BreadcrumbSeparator />
             <BreadcrumbItem>
-              <BreadcrumbPage>{t("nftDetail.breadcrumb.market")}</BreadcrumbPage>
+              <BreadcrumbPage>
+                {t("nftDetail.breadcrumb.market")}
+              </BreadcrumbPage>
             </BreadcrumbItem>
           </BreadcrumbList>
         </Breadcrumb>

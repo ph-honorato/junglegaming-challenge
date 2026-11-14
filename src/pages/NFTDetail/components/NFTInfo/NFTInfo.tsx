@@ -55,7 +55,7 @@ export function NFTInfo({ nft }: NFTInfoProps) {
         {nft.name}
       </h1>
 
-      <div className="mt-3 flex flex-wrap items-center justify-between gap-3">
+      <div className="mt-3 flex flex-wrap items-center justify-between gap-3 border-b-[0.2px] border-current text-muted-foreground pb-1">
         <p className="text-xl font-bold text-primary md:text-2xl">
           {Number(nft.price).toFixed(2)} ETH
         </p>
@@ -125,9 +125,9 @@ export function NFTInfo({ nft }: NFTInfoProps) {
       <div className="mt-8 flex flex-wrap items-center justify-between gap-4">
         <div className="flex items-center gap-4">
           <Button
-            variant="outline"
+            variant="default"
             size="icon"
-            className="h-9 w-9 rounded-full border-border"
+            className="h-14 rounded-full border-border"
             aria-label={t("nftDetail.decreaseQuantity")}
             disabled={!canDecrease}
             onClick={decreaseQuantity}
@@ -141,9 +141,9 @@ export function NFTInfo({ nft }: NFTInfoProps) {
             {quantity}
           </span>
           <Button
-            variant="outline"
+            variant="default"
             size="icon"
-            className="h-9 w-9 rounded-full border-border"
+            className="h-14 rounded-full"
             aria-label={t("nftDetail.increaseQuantity")}
             disabled={!canIncrease}
             onClick={increaseQuantity}
@@ -151,46 +151,38 @@ export function NFTInfo({ nft }: NFTInfoProps) {
             <Plus className="h-4 w-4" />
           </Button>
         </div>
-        {/* Intentionally inert: purchase flow is out of scope. */}
-        <Button className="h-11 rounded-lg bg-primary px-8 text-sm font-bold tracking-wide text-primary-foreground hover:bg-primary/90">
-          {t("nftDetail.buy")}
-        </Button>
-        {/* Intentionally inert: favorite flow is out of scope. */}
-        <Button
-          variant="outline"
-          className="h-11 gap-2 rounded-lg border-border px-5 text-sm font-semibold text-foreground hover:bg-surface-dark"
-        >
-          <Heart className="h-4 w-4" aria-hidden="true" />
-          {t("nftDetail.favorite")}
-        </Button>
+
+        <div className="flex items-right gap-2">
+          {/* Intentionally inert: purchase flow is out of scope. */}
+          <Button className="h-11 rounded-lg bg-primary px-8 text-sm font-bold tracking-wide text-primary-foreground hover:bg-primary/90">
+            {t("nftDetail.buy")}
+          </Button>
+          {/* Intentionally inert: favorite flow is out of scope. */}
+          <Button
+            variant="outline"
+            className="h-11 gap-2 rounded-lg border-border px-5 text-sm font-semibold text-foreground hover:bg-surface-dark"
+          >
+            <Heart className="h-4 w-4" aria-hidden="true" />
+            {t("nftDetail.favorite")}
+          </Button>
+        </div>
       </div>
 
       <div className="mt-6 space-y-2">
-        <p className="text-sm">
-          <span className="font-bold text-foreground">
-            {t("nftDetail.tokenId")}
-          </span>{" "}
-          <span className="text-muted-foreground">{nft.tokenId ?? ""}</span>
+        <p className="text-sm text-muted-foreground">
+          {`${t("nftDetail.tokenId")}: ${nft.tokenId ?? ""}`}
         </p>
-        <p className="text-sm">
-          <span className="font-bold text-foreground">
-            {t("nftDetail.collection")}
-          </span>{" "}
-          <span className="text-muted-foreground">{nft.collection}</span>
+        <p className="text-sm text-muted-foreground">
+          {`${t("nftDetail.collection")}: ${nft.collection}`}
         </p>
-        <p className="text-sm">
-          <span className="font-bold text-foreground">
-            {t("nftDetail.attributes")}
-          </span>{" "}
-          <span className="text-muted-foreground">
-            {(nft.attributes ?? []).join(", ")}
-          </span>
+        <p className="text-sm text-muted-foreground">
+          {`${t("nftDetail.attributes")}: ${(nft.attributes ?? []).join(", ")}`}
         </p>
       </div>
 
       <div className="mt-6 flex items-center gap-4">
         <span className="text-sm font-bold text-foreground">
-          {t("nftDetail.share")}
+          {`${t("nftDetail.share")}:`}
         </span>
         <a
           href={`https://www.linkedin.com/sharing/share-offsite/?url=${encodedShareUrl}`}
