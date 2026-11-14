@@ -303,15 +303,23 @@ describe("NFTInfo", () => {
     expect(screen.getByText("cart-page-marker")).toBeInTheDocument();
   });
 
-  it("redirects to login with a cart redirect when buying while logged out", async () => {
+  it("redirects to login with a cart redirect and stashes the pending purchase when buying while logged out", async () => {
     const { router } = await renderWithRouter();
 
+    // Pick quantity 2 before buying while logged out
+    fireEvent.click(
+      screen.getAllByRole("button", { name: "Aumentar quantidade" })[0],
+    );
     fireEvent.click(screen.getByRole("button", { name: "COMPRAR" }));
 
     await waitFor(() => {
       expect(router.state.location.pathname).toBe("/login");
     });
     expect(mockAddCartItem).not.toHaveBeenCalled();
+    // The intended purchase survives the login redirect
+    expect(
+      JSON.parse(localStorage.getItem("kurio:pending-purchase") ?? "null"),
+    ).toEqual({ nftId: "nft-1", quantity: 2 });
   });
 
   it("stays on the detail page and does not navigate when adding to cart fails", async () => {

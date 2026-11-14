@@ -53,18 +53,8 @@ export function resetCartMockConfig() {
 }
 
 function defaultState(): StoredCartState {
-  // Seed mirrors the Figma cart: three items with quantities 2, 6 and 9
-  const seedIds = ["nft-1", "nft-2", "nft-3"];
-  const seedQuantities = [2, 6, 9];
-  return {
-    items: seedIds.map((nftId, index) => ({
-      id: `cart-item-${index + 1}`,
-      nftId,
-      quantity: seedQuantities[index],
-      maxQuantity: DEFAULT_AVAILABILITY,
-    })),
-    coupon: null,
-  };
+  // A fresh session always starts with an empty cart
+  return { items: [], coupon: null };
 }
 
 function loadState(): StoredCartState {
@@ -248,6 +238,16 @@ const handleRemoveCartItem = async ({
   return HttpResponse.json(buildCartResponse(state));
 };
 
+// Clears the whole cart (used when the user logs out)
+const handleClearCart = async () => {
+  await maybeDelay();
+  if (shouldFail) return errorResponse(failStatus, "INTERNAL_ERROR");
+
+  state = defaultState();
+  saveState(state);
+  return HttpResponse.json(buildCartResponse(state));
+};
+
 const handleApplyCoupon = async ({ request }: { request: Request }) => {
   await maybeDelay();
   if (shouldFail) return errorResponse(failStatus, "INTERNAL_ERROR");
@@ -282,6 +282,8 @@ export const cartHandlers = [
   http.patch("/api/cart/items/:itemId", handleUpdateCartItem),
 
   http.delete("/api/cart/items/:itemId", handleRemoveCartItem),
+
+  http.delete("/api/cart", handleClearCart),
 
   http.post("/api/cart/coupon", handleApplyCoupon),
 

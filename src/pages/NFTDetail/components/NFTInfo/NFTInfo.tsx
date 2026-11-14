@@ -6,6 +6,7 @@ import { Button } from "@components";
 import { useAuth } from "@/contexts/AuthContext";
 import { useAddCartItem } from "@/hooks/useCart";
 import { useToast } from "@/hooks/use-toast";
+import { savePendingPurchase } from "@/lib/pendingPurchase";
 
 import { useNFTInfo } from "./NFTInfo.hook";
 import type { NFTInfoProps } from "./NFTInfo.types";
@@ -59,6 +60,8 @@ export function NFTInfo({ nft }: NFTInfoProps) {
 
   const handleBuy = () => {
     if (!isLogged) {
+      // Stash the intended purchase so the login flow can complete it
+      savePendingPurchase({ nftId: nft.id, quantity });
       navigate({ to: "/login", search: { redirect: "/cart" } });
       return;
     }

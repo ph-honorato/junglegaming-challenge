@@ -1,9 +1,11 @@
 // Cart Hooks using TanStack Query
 // All mutations return the full CartResponse, which becomes the new cached cart.
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useCallback } from "react";
 import {
   addCartItem,
   applyCoupon,
+  clearCart,
   fetchCart,
   removeCartItem,
   removeCoupon,
@@ -11,6 +13,7 @@ import {
 } from "@/api/cart";
 import type { AddCartItemPayload, CartResponse } from "@/types/cart";
 import { toEthString } from "@/lib/format";
+import { useAuth } from "@/contexts/AuthContext";
 
 const CART_QUERY_KEY = "cart" as const;
 
@@ -133,4 +136,20 @@ export function useRemoveCoupon() {
       queryClient.setQueryData(cartQueryKeys.all, data);
     },
   });
+}
+
+// Logging out erases the cart: server-side cart, cached query and session state
+export function useLogout() {
+  const { logout } = useAuth();
+  const queryClient = useQueryClient();
+
+  return useCallback(async () => {
+    try {
+      await clearCart();
+    } catch {
+      // Even if the API fails, the session must end with an empty local cart
+    }
+    queryClient.removeQueries({ queryKey: cartQueryKeys.all });
+    logout();
+  }, [logout, queryClient]);
 }

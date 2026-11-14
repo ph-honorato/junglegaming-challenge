@@ -11,20 +11,42 @@ import {
   CardTitle,
 } from "@/components/ui";
 import { useAuth } from "@/contexts/AuthContext";
+import { useAddCartItem, useLogout } from "@/hooks/useCart";
+import { useToast } from "@/hooks/use-toast";
+import { consumePendingPurchase } from "@/lib/pendingPurchase";
 
 function LoginPage() {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const { redirect } = useSearch({ from: "/login" });
-  const { isLogged, login, logout } = useAuth();
+  const { isLogged, login } = useAuth();
+  const { toast } = useToast();
+  const { mutateAsync: addItem, isPending: isAdding } = useAddCartItem();
+  const logoutWithCartClear = useLogout();
 
-  const handleSimulateLogin = () => {
+  const handleSimulateLogin = async () => {
     login();
+
+    // A buy started while logged out completes right after the login
+    const pendingPurchase = consumePendingPurchase();
+    if (pendingPurchase) {
+      try {
+        await addItem(pendingPurchase);
+        navigate({ to: "/cart" });
+        return;
+      } catch {
+        toast({
+          title: t("nftDetail.buyError"),
+          variant: "destructive",
+        });
+      }
+    }
+
     navigate({ to: redirect ?? "/" });
   };
 
   const handleLogout = () => {
-    logout();
+    void logoutWithCartClear();
   };
 
   return (
@@ -52,6 +74,7 @@ function LoginPage() {
             <Button
               className="w-full gap-2"
               onClick={handleSimulateLogin}
+              disabled={isAdding}
               aria-label={t("login.simulate")}
             >
               <LogIn className="h-5 w-5" />

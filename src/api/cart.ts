@@ -41,6 +41,12 @@ export async function removeCartItem(itemId: string): Promise<CartResponse> {
   return response.data;
 }
 
+// Erases the entire cart (called when the user logs out)
+export async function clearCart(): Promise<CartResponse> {
+  const response = await api.delete<CartResponse>(CART_ENDPOINT);
+  return response.data;
+}
+
 export async function applyCoupon(code: string): Promise<CartResponse> {
   const response = await api.post<CartResponse>(`${CART_ENDPOINT}/coupon`, {
     code,
