@@ -1,4 +1,5 @@
 import { Heart } from "lucide-react";
+import { Link } from "@tanstack/react-router";
 import { cn } from "@/lib/utils";
 import { Card, Button, Skeleton } from "../ui";
 import { useTranslation } from "react-i18next";
@@ -43,7 +44,7 @@ export function NFTCard({
     : 0;
 
   return (
-    <Card className="group h-full flex flex-col overflow-hidden transition-all duration-300 hover:shadow-xl hover:-translate-y-1 bg-card border-border hover:border-primary/40 p-3">
+    <Card className="group relative h-full flex flex-col overflow-hidden transition-all duration-300 hover:shadow-xl hover:-translate-y-1 bg-card border-border hover:border-primary/40 p-3">
       {/* Image Container with rounded corners */}
       <div className="relative aspect-square overflow-hidden rounded-xl bg-muted mb-3">
         {!imageLoaded && (
@@ -90,7 +91,7 @@ export function NFTCard({
         <Button
           variant="ghost"
           size="icon"
-          className="absolute top-2 right-2 h-8 w-8 bg-background/80 backdrop-blur-sm hover:bg-background/90 transition-all opacity-0 group-hover:opacity-100 rounded-full"
+          className="absolute top-2 right-2 z-20 h-8 w-8 bg-background/80 backdrop-blur-sm hover:bg-background/90 transition-all opacity-0 group-hover:opacity-100 rounded-full"
           onClick={() => onFavorite?.(nft.id)}
           aria-label={
             isFavorite ? t("nft.removeFromFavorites") : t("nft.addToFavorites")
@@ -125,6 +126,14 @@ export function NFTCard({
           )}
         </div>
       </div>
+
+      {/* Card-wide link to the detail page; sits above the content but below the favorite button */}
+      <Link
+        to="/nft/$id"
+        params={{ id: nft.id }}
+        aria-label={t("nft.viewDetails", { name: nft.name })}
+        className="absolute inset-0 z-10 rounded-2xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+      />
     </Card>
   );
 }

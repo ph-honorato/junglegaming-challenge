@@ -123,6 +123,7 @@ ol {
   outline-offset: 2px;
 }
 
+/* Custom Classes */
 .checkbox-filter {
   .option {
     color: var(--color-secondary);
@@ -135,6 +136,20 @@ ol {
   button {
     display: none;
   }
+}
+
+.navigation-buttons {
+  background-color: transparent;
+  padding: 36px 0;
+  border-radius: 0 !important;
+
+  &:hover {
+    background-color: transparent;
+  }
+}
+
+.section-selected {
+  border-bottom: solid 2px var(--color-primary);
 }
 
 @media (prefers-reduced-motion: reduce) {

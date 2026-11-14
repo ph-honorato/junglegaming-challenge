@@ -2,6 +2,7 @@
 import type {
   NFT,
   NFTListResponse,
+  NFTReview,
   CatalogFiltersResponse,
   CategoryCount,
   NetworkCount,
@@ -72,6 +73,112 @@ const NFT_IMAGES = [
   "/images/nfts/placeholder-7.svg",
   "/images/nfts/placeholder-8.svg",
 ];
+
+// Detail fixture pools (used only by the NFT detail endpoint)
+const REVIEW_USERS = [
+  "Ana Beatriz",
+  "Carlos Eduardo",
+  "Mariana Lima",
+  "João Pedro",
+  "Fernanda Costa",
+  "Rafael Souza",
+  "Luiza Martins",
+  "Pedro Henrique",
+  "Camila Rocha",
+  "Bruno Alves",
+  "Juliana Pereira",
+  "Thiago Santos",
+  "Larissa Oliveira",
+  "Gabriel Ferreira",
+  "Beatriz Almeida",
+  "Lucas Barbosa",
+  "Amanda Ribeiro",
+  "Diego Cardoso",
+  "Patrícia Gomes",
+  "Felipe Araújo",
+] as const;
+
+const REVIEW_COMMENTS = [
+  "Arte incrível, as cores ficam ainda melhores em tela cheia.",
+  "Compra tranquila e metadados verificados. Recomendo o criador.",
+  "Peça única, a textura da arte é impressionante.",
+  "Excelente custo-benefício para uma edição limitada.",
+  "A composição transmite muita energia. Já adquiri outra da coleção.",
+  "Token entregue rapidamente e com suporte excelente do criador.",
+  "Uma das melhores peças da coleção. Detalhes magníficos.",
+  "Gostei da arte, mas esperava mais variação nos atributos.",
+  "Processo de cunhagem simples e bem documentado. Muito bom.",
+  "A arte tem um movimento único. Vale cada centavo.",
+] as const;
+
+const ATTRIBUTES_POOL = [
+  "Óculos",
+  "Esmeralda",
+  "Raro",
+  "Dourado",
+  "Boné",
+  "Fone Verde",
+  "Fundo Clássico",
+  "Épico",
+  "Corrente de Ouro",
+  "Edição Limitada",
+] as const;
+
+const DETAIL_CONTRACT = "0x7A42fa19B2E5C7d83F9a01BbC64Df8E1A2b919E8";
+const DETAIL_ROYALTIES = 5;
+const DETAIL_TOKEN_STANDARD = "ERC-721";
+
+// Extracts the numeric suffix of the NFT id (e.g. "nft-42" -> 42) to seed deterministic fixtures
+function getNFTNumber(nft: NFT): number {
+  const parsed = Number(nft.id.replace(/\D/g, ""));
+  return Number.isNaN(parsed) || parsed === 0 ? 1 : parsed;
+}
+
+function generateReviews(nft: NFT): NFTReview[] {
+  const nftNumber = getNFTNumber(nft);
+  // The first NFT mirrors the reference design with 19 reviews
+  const count = nftNumber === 1 ? 19 : ((nftNumber * 9) % 20) + 4;
+  const releaseTime = new Date(nft.release_date).getTime();
+
+  return Array.from({ length: count }, (_, r) => {
+    const user = REVIEW_USERS[(nftNumber + r * 3) % REVIEW_USERS.length];
+    const comment = REVIEW_COMMENTS[(nftNumber + r) % REVIEW_COMMENTS.length];
+    const rating = 5 - ((nftNumber + r) % 3);
+    const date = new Date(
+      releaseTime + (r * 5 + (nftNumber % 5) + 1) * 24 * 60 * 60 * 1000,
+    ).toISOString();
+
+    return {
+      id: `${nft.id}-review-${r + 1}`,
+      user,
+      avatar: `https://api.dicebear.com/7.x/avataaars/svg?seed=${encodeURIComponent(user)}`,
+      rating,
+      date,
+      comment,
+    };
+  });
+}
+
+function generateAttributes(nft: NFT): string[] {
+  const nftNumber = getNFTNumber(nft);
+  return [0, 1, 2].map(
+    (offset) => ATTRIBUTES_POOL[(nftNumber - 1 + offset) % ATTRIBUTES_POOL.length],
+  );
+}
+
+function generateEditions(nftNumber: number): string[] {
+  // Odd NFTs mirror the reference design (1/1, 1/16, 1/50); even ones vary for fixture diversity
+  const sizes = nftNumber % 2 === 1 ? [1, 16, 50] : [1, 25, 100];
+  return sizes.map((size) => `1/${size}`);
+}
+
+function generateLongDescription(nft: NFT, editions: string[]): string[] {
+  const selectedEdition = editions[editions.length - 1];
+  return [
+    `${nft.name} é uma obra digital ${selectedEdition} finalizada à mão da coleção ${nft.collection}. Cada atributo fica armazenado nos metadados do token e verificado na ${nft.network}. A obra explora identidade, movimento e luz em um mundo digital sem fronteiras.`,
+    `A propriedade inclui a arte em alta resolução, lançamentos exclusivos para colecionadores e um registro permanente de procedência registrado na rede. ${nft.creator} recebe ${DETAIL_ROYALTIES}% de direitos autorais nas vendas secundárias, apoiando novos trabalhos e lançamentos da comunidade.`,
+  ];
+}
 
 function generateNFTs(): NFT[] {
   const nfts: NFT[] = [];
@@ -162,6 +269,7 @@ export const CATALOG_FILTERS: CatalogFiltersResponse = {
 export function filterNFTs(params: {
   q?: string;
   category?: string;
+  collection?: string;
   minPrice?: string;
   maxPrice?: string;
   network?: string;
@@ -183,6 +291,12 @@ export function filterNFTs(params: {
 
   if (params.category) {
     result = result.filter((nft) => nft.category === params.category);
+  }
+
+  if (params.collection) {
+    result = result.filter(
+      (nft) => nft.collection.toLowerCase() === params.collection!.toLowerCase(),
+    );
   }
 
   if (params.minPrice) {
@@ -262,5 +376,34 @@ export function paginateNFTs(
 }
 
 export function getNFTById(id: string): NFT | undefined {
-  return ALL_NFTS.find((nft) => nft.id === id);
+  const nft = ALL_NFTS.find((nft) => nft.id === id);
+  if (!nft) return undefined;
+
+  const nftNumber = getNFTNumber(nft);
+  const reviews = generateReviews(nft);
+  const editions = generateEditions(nftNumber);
+  const averageRating =
+    reviews.length > 0
+      ? Number(
+          (
+            reviews.reduce((sum, review) => sum + review.rating, 0) /
+            reviews.length
+          ).toFixed(1),
+        )
+      : undefined;
+
+  return {
+    ...nft,
+    tokenId: `#${String(nftNumber).padStart(4, "0")}`,
+    gallery: Array.from({ length: 4 }, () => nft.image),
+    attributes: generateAttributes(nft),
+    contract: DETAIL_CONTRACT,
+    tokenStandard: DETAIL_TOKEN_STANDARD,
+    royalties: DETAIL_ROYALTIES,
+    editionStatus: "ABERTA",
+    editions,
+    rating: averageRating,
+    longDescription: generateLongDescription(nft, editions),
+    reviews,
+  };
 }
