@@ -18,19 +18,7 @@ O produto usa a identidade visual **KURIO** e textos em pt-BR (`src/i18n/pt-BR.j
 - [Credenciais fictícias](#credenciais-fictícias)
 - [Cenários de mock: seleção e reset](#cenários-de-mock-seleção-e-reset)
 - [Comandos](#comandos)
-- [Estrutura do projeto](#estrutura-do-projeto)
-- [Rotas](#rotas)
-- [Contratos REST](#contratos-rest)
-- [Eventos Socket.IO](#eventos-socketio)
-- [Política de sessão](#política-de-sessão)
-- [Estado do carrinho](#estado-do-carrinho)
-- [Estratégia de cache](#estratégia-de-cache)
-- [Reconciliação REST × Socket.IO](#reconciliação-rest--socketio)
-- [Testes](#testes)
-- [Auditoria Lighthouse](#auditoria-lighthouse)
-- [Deploy](#deploy)
-- [Acessibilidade](#acessibilidade)
-- [Limitações e desvios do Figma](#limitações-e-desvios-do-figma)
+- [Arquitetura](./ARCHITECTURE.md)
 
 ---
 
@@ -177,75 +165,6 @@ resetMockConfig();
 | `npm run msw:init`          | Regenera `public/mockServiceWorker.js`.                                            |
 | `npm run lighthouse`        | Lighthouse (perfil desktop) em `http://localhost:4173` → `lighthouse-report.html`. |
 | `npm run lighthouse:mobile` | Lighthouse (perfil mobile) → `lighthouse-report-mobile.html`.                      |
-
----
-
-## Estrutura do projeto
-
-```
-src/
-├── api/                 # Funções de acesso à API (Axios)
-├── components/          # Componentes compartilhados (Header, Footer, NFTCard, ...)
-│   └── ui/              # Componentes shadcn/ui
-├── hooks/               # useNFTs, useSocket, use-toast
-├── i18n/                # Traduções (pt-BR)
-├── lib/                 # api (Axios), socket (Socket.IO), utils
-├── mocks/               # MSW: browser, handlers, fixtures (data/nfts.ts)
-├── pages/               # Páginas (Home, NFTDetail, Cart, Checkout, ...)
-├── routes/              # Rotas TanStack Router (file-based) + routeTree.gen.ts
-├── test/                # Setup do Vitest
-└── types/               # Contratos de tipos (nft.ts)
-e2e/                     # Testes Playwright
-public/                  # Assets (imagens dos NFTs, mockServiceWorker.js)
-```
-
----
-
-## Rotas
-
-| Rota         | Página                 | Estado          |
-| ------------ | ---------------------- | --------------- |
-| `/`          | Início (catálogo)      | ✅ Implementada |
-| `/nft/$id`   | Detalhe do NFT         | ✅ Implementada |
-| `/cart`      | Carrinho               | ⚠️ Stub         |
-| `/checkout`  | Pagamento              | ⚠️ Stub         |
-| `/order/$id` | Confirmação de pedido  | ⚠️ Stub         |
-| `/login`     | Login                  | ⚠️ Stub         |
-| `/register`  | Cadastro               | ⚠️ Stub         |
-| `/profile`   | Perfil do colecionador | ⚠️ Stub         |
-| `/wallets`   | Carteiras              | ⚠️ Stub         |
-
----
-
-## Contratos REST
-
-**Implementado (NFTs)** — consumido em `src/api/nft.ts`, mockado em `src/mocks/handlers/nfts.ts`. Os handlers registram tanto `/api/nfts*` quanto `/nfts*`.
-
-| Método | Endpoint                                                                    | Descrição                                    | Resposta                                                                             |
-| ------ | --------------------------------------------------------------------------- | -------------------------------------------- | ------------------------------------------------------------------------------------ |
-| `GET`  | `/nfts?q&category&collection&minPrice&maxPrice&network&sort&tab&page&limit` | Lista com busca/filtros/ordenação/paginação. | `{ data: NFT[], meta: { total, page, limit, totalPages } }`                          |
-| `GET`  | `/nfts/featured`                                                            | NFTs em destaque (8).                        | `{ data: NFT[] }`                                                                    |
-| `GET`  | `/nfts/filters`                                                             | Opções de filtro.                            | `{ categories, networks, priceRange }`                                               |
-| `GET`  | `/nfts/:id`                                                                 | Detalhe por id.                              | `NFT` (com `gallery`, `attributes`, `reviews`, `editions`, ...) ou `404 { message }` |
-
-Erros: `5xx` (`{ message: "Internal Server Error" }`) e `404` (`{ message: "NFT not found" }`).
-
-**Recursos exigidos e ainda não implementados** (nota): Sessão/conta (cadastro, login, sessão, logout, expiração), Favoritos, Carrinho, Cotação (cupom/disponibilidade/taxas/total), Pedidos (criação idempotente + estado/recibo), Perfil e Carteiras. Também não há representação dos erros exigidos (validação, sessão inválida, falta de permissão, recurso inexistente, conflito de disponibilidade, falha transitória) nem chave de idempotência nos pedidos.
-
----
-
----
-
-## Limitações e desvios do Figma
-
-> ⚠️ **Pendência:** o `CHALLENGE.md` pede que limitações, decisões de UX e desvios do Figma sejam registrados em **`ARCHITECTURE.md`**, que **ainda não existe** neste repositório.
-
-Desvios/limitações conhecidos até aqui:
-
-- **Imagens:** o catálogo usa placeholders SVG locais (`public/images/nfts/placeholder-1..8.svg`); as avatares de criadores/avaliações usam `api.dicebear.com` (dependência de rede externa).
-- **Textos do catálogo:** nomes/descrições de NFTs em inglês no _fixture_ (`src/mocks/data/nfts.ts`), enquanto a UI está em pt-BR.
-- **Preço:** trafega como `number`, não como string decimal (ver [Status e pendências](#status-e-pendências)).
-- **Páginas em stub:** sem fidelidade ao Figma nos fluxos de conta/carrinho/checkout/confirmação.
 
 ---
 
