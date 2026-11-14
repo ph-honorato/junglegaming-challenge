@@ -3,6 +3,8 @@ import { useNFTs, useFeaturedNFTs, useCatalogFilters } from "@/hooks/useNFTs";
 import {
   HeroCarousel,
   CatalogSection,
+  CatalogProvider,
+  MobileSearchBar,
   CreatorsSection,
   BlogSection,
 } from "./components";
@@ -57,7 +59,14 @@ export function HomePage() {
   };
 
   return (
-    <>
+    <CatalogProvider
+      initialCategories={filtersData?.categories}
+      initialNetworks={filtersData?.networks}
+      initialPriceRange={filtersData?.priceRange}
+    >
+      {/* Mobile Search + Filters Trigger */}
+      <MobileSearchBar />
+
       {/* Hero Section */}
       <HeroCarousel items={featuredData?.data.slice(0, 3) || []} />
 
@@ -72,9 +81,6 @@ export function HomePage() {
         currentPage={nftsData?.meta?.page || 1}
         onPageChange={handlePageChange}
         isError={nftsError}
-        categories={filtersData?.categories}
-        networks={filtersData?.networks}
-        priceRange={filtersData?.priceRange}
       />
 
       {/* Creators Section */}
@@ -82,7 +88,7 @@ export function HomePage() {
 
       {/* Learn / Blog Section */}
       <BlogSection />
-    </>
+    </CatalogProvider>
   );
 }
 

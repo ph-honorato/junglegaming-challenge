@@ -8,7 +8,7 @@ import {
 } from "./CreatorsSection.types";
 
 function CreatorBanner(props: CreatorBannerProps) {
-  const { image, title, description, href } = props;
+  const { image, title, description } = props;
   const { t } = useTranslation();
 
   return (
@@ -39,7 +39,7 @@ function CreatorBanner(props: CreatorBannerProps) {
             className="self-start bg-primary text-primary-foreground hover:bg-primary/90 font-medium px-4 py-2 text-xs md:text-sm rounded-lg shadow-sm"
             asChild
           >
-            <Link to={href} className="flex items-center gap-2">
+            <Link to={"/"} className="flex items-center gap-2">
               {t("common.explore")}
               <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
             </Link>

@@ -62,7 +62,7 @@ export function Carousel<T>({
       </div>
       {showDots && items.length > 1 && (
         <div
-          className="absolute bottom-6 left-1/2 -translate-x-1/2 flex gap-2"
+          className="absolute bottom-2 lg:bottom-6 left-1/2 -translate-x-1/2 flex gap-2"
           role="tablist"
           aria-label="Slides"
         >

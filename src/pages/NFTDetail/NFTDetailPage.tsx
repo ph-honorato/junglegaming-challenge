@@ -18,6 +18,7 @@ import {
   NFTInfo,
   NFTDetailTabs,
   CollectionCarousel,
+  NFTDetailTopBar,
 } from "./components";
 
 // Skeleton mirroring the page layout to avoid shifts while the NFT loads
@@ -134,26 +135,32 @@ export function NFTDetailPage() {
   }
 
   return (
-    <div className="py-8 lg:py-12">
+    // Bottom padding clears the fixed mobile purchase bar
+    <div className="pt-8 pb-32 lg:py-12">
       <div className="mx-auto max-w-[1200px] px-4 sm:px-6 lg:px-8">
-        <Breadcrumb>
-          <BreadcrumbList>
-            <BreadcrumbItem>
-              <BreadcrumbLink asChild>
-                <Link to="/">{t("nftDetail.breadcrumb.home")}</Link>
-              </BreadcrumbLink>
-            </BreadcrumbItem>
-            <BreadcrumbSeparator />
-            <BreadcrumbItem>
-              <BreadcrumbPage>
-                {t("nftDetail.breadcrumb.market")}
-              </BreadcrumbPage>
-            </BreadcrumbItem>
-          </BreadcrumbList>
-        </Breadcrumb>
+        {/* Mobile top bar: back + favorite (replaces the breadcrumb) */}
+        <NFTDetailTopBar className="lg:hidden" />
+
+        <div className="hidden lg:block">
+          <Breadcrumb>
+            <BreadcrumbList>
+              <BreadcrumbItem>
+                <BreadcrumbLink asChild>
+                  <Link to="/">{t("nftDetail.breadcrumb.home")}</Link>
+                </BreadcrumbLink>
+              </BreadcrumbItem>
+              <BreadcrumbSeparator />
+              <BreadcrumbItem>
+                <BreadcrumbPage>
+                  {t("nftDetail.breadcrumb.market")}
+                </BreadcrumbPage>
+              </BreadcrumbItem>
+            </BreadcrumbList>
+          </Breadcrumb>
+        </div>
 
         <div
-          className="mt-8 grid items-start gap-10 lg:mt-10 lg:grid-cols-[1.15fr_1fr] lg:gap-16"
+          className="mt-4 lg:mt-10 grid items-start gap-6 lg:grid-cols-[1.15fr_1fr] lg:gap-16"
           data-testid="nft-details"
         >
           <NFTGallery
