@@ -118,7 +118,8 @@ describe("NFTDetailPage", () => {
     expect(
       await screen.findByRole("heading", { name: "Emerald Ape #042" }),
     ).toBeInTheDocument();
-    expect(screen.getByText("1.19 ETH")).toBeInTheDocument();
+    // Price renders twice: desktop info row and mobile purchase bar
+    expect(screen.getAllByText("1.19 ETH")).toHaveLength(2);
     expect(
       screen.getByText("19 avaliações de colecionadores"),
     ).toBeInTheDocument();

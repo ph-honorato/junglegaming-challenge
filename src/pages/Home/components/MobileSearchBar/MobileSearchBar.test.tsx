@@ -7,8 +7,12 @@ import { CatalogProvider, useCatalog } from "../CatalogSection"
 import { I18nextProvider } from "react-i18next"
 import i18n from "@/i18n"
 
+// Stable object identity: CatalogProvider re-syncs on every useSearch() result,
+// so a fresh literal per call would loop renders forever.
+const mockSearch = {}
+
 vi.mock("@tanstack/react-router", () => ({
-  useSearch: () => ({}),
+  useSearch: () => mockSearch,
   useNavigate: () => vi.fn(),
 }))
 

@@ -3,6 +3,7 @@ import {
   useContext,
   useReducer,
   useEffect,
+  useRef,
   type ReactNode,
 } from "react";
 import { useSearch, useNavigate } from "@tanstack/react-router";
@@ -171,21 +172,27 @@ export function CatalogProvider({
   }, [initialCategories, initialNetworks, initialPriceRange]);
 
   // Sync state when URL search changes (e.g. back/forward navigation)
+  const lastSyncedParamsRef = useRef<CatalogState["searchParams"] | null>(null);
   useEffect(() => {
-    dispatch({
-      type: "SET_SEARCH_PARAMS",
-      payload: {
-        q: search.q as string | undefined,
-        category: search.category as string | undefined,
-        minPrice: search.minPrice as string | undefined,
-        maxPrice: search.maxPrice as string | undefined,
-        network: search.network as string | undefined,
-        sort: (search.sort as SortOption) || "recent",
-        tab: (search.tab as CatalogTab) || "all",
-        page: parseInt((search.page as string) || "1", 10),
-        limit: 8,
-      },
-    });
+    const nextParams = {
+      q: search.q as string | undefined,
+      category: search.category as string | undefined,
+      minPrice: search.minPrice as string | undefined,
+      maxPrice: search.maxPrice as string | undefined,
+      network: search.network as string | undefined,
+      sort: (search.sort as SortOption) || "recent",
+      tab: (search.tab as CatalogTab) || "all",
+      page: parseInt((search.page as string) || "1", 10),
+      limit: 8,
+    };
+
+    if (
+      JSON.stringify(lastSyncedParamsRef.current) === JSON.stringify(nextParams)
+    ) {
+      return;
+    }
+    lastSyncedParamsRef.current = nextParams;
+    dispatch({ type: "SET_SEARCH_PARAMS", payload: nextParams });
   }, [search]);
 
   // Sync search params with URL

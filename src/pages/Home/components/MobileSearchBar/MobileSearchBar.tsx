@@ -12,11 +12,13 @@ export function MobileSearchBar({ className }: MobileSearchBarProps) {
   const { searchParams, setQuery, setIsMobileFiltersOpen, hasActiveFilters } =
     useCatalog();
   const [term, setTerm] = React.useState(searchParams.q ?? "");
+  const [syncedParam, setSyncedParam] = React.useState(searchParams.q ?? "");
 
-  // Keep the input in sync when the query param changes externally (e.g. back navigation)
-  React.useEffect(() => {
+  // Reset the input when the query param changes externally (e.g. back navigation)
+  if ((searchParams.q ?? "") !== syncedParam) {
+    setSyncedParam(searchParams.q ?? "");
     setTerm(searchParams.q ?? "");
-  }, [searchParams.q]);
+  }
 
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();

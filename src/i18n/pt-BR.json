@@ -84,9 +84,11 @@
       "fechada": "FECHADA"
     },
     "quantity": "Quantidade",
+    "quantityShort": "Qtd.",
     "decreaseQuantity": "Diminuir quantidade",
     "increaseQuantity": "Aumentar quantidade",
     "buy": "COMPRAR",
+    "buyNft": "Comprar NFT",
     "favorite": "Favoritar",
     "tokenId": "ID do token",
     "collection": "Coleção",

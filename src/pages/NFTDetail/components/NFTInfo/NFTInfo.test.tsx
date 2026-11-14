@@ -1,12 +1,16 @@
 // NFTInfo Unit Tests
 import { render, screen, fireEvent } from "@testing-library/react"
-import { describe, it, expect } from "vitest"
+import { describe, it, expect, vi } from "vitest"
 import "@testing-library/jest-dom"
 import { NFTInfo } from "./NFTInfo"
 import { I18nextProvider } from "react-i18next"
 import { AuthProvider } from "@/contexts/AuthContext"
 import i18n from "@/i18n"
 import type { NFT } from "@/types/nft"
+
+vi.mock("@tanstack/react-router", () => ({
+  useNavigate: () => vi.fn(),
+}))
 
 // Mock reviews (19 collector reviews)
 const mockReviews = Array.from({ length: 19 }, (_, i) => ({
@@ -51,15 +55,19 @@ describe("NFTInfo", () => {
   it("renders name, price and collector reviews count", () => {
     renderWithProviders()
     expect(screen.getByRole("heading", { level: 1, name: "Emerald Ape #042" })).toBeInTheDocument()
-    expect(screen.getByText("1.19 ETH")).toBeInTheDocument()
+    expect(screen.getAllByText("1.19 ETH").length).toBeGreaterThan(0)
     expect(screen.getByText("19 avaliações de colecionadores")).toBeInTheDocument()
   })
 
-  it("renders rating stars group with accessible label", () => {
+  it("renders rating with accessible label on desktop and mobile variants", () => {
     renderWithProviders()
+    // Desktop stars group and mobile rating pill share the same accessible label
     expect(
-      screen.getByRole("img", { name: "Avaliação média de 4.8 de 5 estrelas" })
-    ).toBeInTheDocument()
+      screen.getAllByRole("img", { name: "Avaliação média de 4.8 de 5 estrelas" })
+    ).toHaveLength(2)
+    // Mobile rating pill shows the rating value and review count
+    expect(screen.getAllByText("4.8").length).toBeGreaterThan(0)
+    expect(screen.getByText("(19)")).toBeInTheDocument()
   })
 
   it("renders buy and favorite buttons without click handlers", () => {
@@ -75,21 +83,30 @@ describe("NFTInfo", () => {
 
   it("caps quantity at maxEdition on increase and at 1 on decrease", () => {
     renderWithProviders()
-    const increaseButton = screen.getByRole("button", { name: "Aumentar quantidade" })
-    const decreaseButton = screen.getByRole("button", { name: "Diminuir quantidade" })
-    const quantity = screen.getByLabelText("Quantidade")
+    // Quantity stepper renders twice (desktop row + mobile purchase bar)
+    const increaseButtons = screen.getAllByRole("button", { name: "Aumentar quantidade" })
+    const decreaseButtons = screen.getAllByRole("button", { name: "Diminuir quantidade" })
+    const quantities = screen.getAllByLabelText("Quantidade")
+    expect(quantities).toHaveLength(2)
 
     // Increase 5 times: clamped at maxQuantity (3)
     for (let i = 0; i < 5; i += 1) {
-      fireEvent.click(increaseButton)
+      fireEvent.click(increaseButtons[0])
     }
-    expect(quantity).toHaveTextContent("3")
+    quantities.forEach((quantity) => expect(quantity).toHaveTextContent("3"))
 
     // Decrease until the floor: clamped at 1
     for (let i = 0; i < 5; i += 1) {
-      fireEvent.click(decreaseButton)
+      fireEvent.click(decreaseButtons[0])
     }
-    expect(quantity).toHaveTextContent("1")
+    quantities.forEach((quantity) => expect(quantity).toHaveTextContent("1"))
+  })
+
+  it("renders the mobile fixed purchase bar with buy and cart actions", () => {
+    renderWithProviders()
+    expect(screen.getByRole("button", { name: "Comprar NFT" })).toBeInTheDocument()
+    expect(screen.getByRole("button", { name: "Carrinho" })).toBeInTheDocument()
+    expect(screen.getByText("Qtd.")).toBeInTheDocument()
   })
 
   it("highlights the last edition badge by default and moves selection on click", () => {
