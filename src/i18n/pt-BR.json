@@ -88,6 +88,7 @@
     "decreaseQuantity": "Diminuir quantidade",
     "increaseQuantity": "Aumentar quantidade",
     "buy": "COMPRAR",
+    "buyError": "Não foi possível adicionar o NFT ao carrinho",
     "buyNft": "Comprar NFT",
     "favorite": "Favoritar",
     "tokenId": "ID do token",
@@ -173,6 +174,55 @@
     "loggedTitle": "Você está logado",
     "loggedDescription": "Esta é uma sessão simulada. Clique abaixo para encerrá-la.",
     "hint": "Autenticação simulada — nenhum dado real é enviado."
+  },
+  "cart": {
+    "title": "Carrinho de NFTs",
+    "breadcrumb": {
+      "home": "Início",
+      "marketplace": "Mercado",
+      "cart": "Carrinho"
+    },
+    "table": {
+      "nfts": "NFTs",
+      "price": "Preço",
+      "editions": "Edições",
+      "total": "Total"
+    },
+    "tokenId": "ID do token",
+    "edition": "Edição",
+    "back": "Voltar",
+    "increaseQuantity": "Aumentar quantidade",
+    "decreaseQuantity": "Diminuir quantidade",
+    "quantityLocked": "Quantidade máxima atingida",
+    "remove": "Remover item",
+    "summary": {
+      "title": "Resumo da carteira",
+      "couponLabel": "Código promocional",
+      "couponPlaceholder": "Digite o código promocional...",
+      "apply": "Aplicar",
+      "removeCoupon": "Remover cupom",
+      "subtotal": "Subtotal",
+      "discount": "Desconto do lançamento",
+      "networkFee": "Taxa de rede",
+      "feeHint": "Taxa estimada",
+      "total": "Total",
+      "checkout": "Conectar e finalizar",
+      "continue": "Continuar explorando"
+    },
+    "couponInvalid": "Cupom inválido ou expirado",
+    "couponApplied": "Cupom aplicado",
+    "quantityError": "Não foi possível atualizar a quantidade",
+    "removeError": "Não foi possível remover o item",
+    "empty": {
+      "title": "Seu carrinho está vazio",
+      "description": "Explore o mercado e adicione NFTs para finalizar a compra.",
+      "cta": "Continuar explorando"
+    },
+    "error": {
+      "title": "Não foi possível carregar o carrinho",
+      "description": "Verifique sua conexão e tente novamente.",
+      "retry": "Tentar novamente"
+    }
   },
   "footer": {
     "features": {
