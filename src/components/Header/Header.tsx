@@ -1,6 +1,15 @@
 import * as React from "react";
 import { useLocation, useNavigate } from "@tanstack/react-router";
-import { Search, Heart, ShoppingCart, Menu, X, LogIn } from "lucide-react";
+import { useAuth } from "../../contexts/AuthContext";
+import {
+  Search,
+  Heart,
+  ShoppingCart,
+  Menu,
+  X,
+  LogIn,
+  LogOut,
+} from "lucide-react";
 import {
   Button,
   NavigationMenu,
@@ -16,6 +25,7 @@ export function Header() {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const location = useLocation();
+  const { isLogged } = useAuth();
   // const search = useSearch({ from: "/" });
   const [mobileMenuOpen, setMobileMenuOpen] = React.useState(false);
   const [selectedSection, setSelectedSection] = React.useState<string>("");
@@ -60,7 +70,7 @@ export function Header() {
   };
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 shadow-sm">
+    <header className="hidden lg:block sticky top-0 z-50 w-full border-b border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 shadow-sm">
       <div className="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex h-16 lg:h-18 items-center justify-between">
           {/* Logo - go to home (Início section) */}
@@ -68,6 +78,7 @@ export function Header() {
             onClick={() => handleSectionNavigation("hero")}
             className="flex items-center gap-2 text-xl lg:text-2xl font-bold text-primary hover:opacity-80 transition-all duration-200 group"
             aria-label={t("navigation.home")}
+            data-testid="logo"
           >
             KURIO
           </button>
@@ -164,15 +175,21 @@ export function Header() {
               <ShoppingCart className="h-5 w-5" />
             </Button>
 
-            {/* Login */}
+            {/* Login / Logout */}
             <Button
               variant="default"
               onClick={() => navigateTo("/login")}
-              aria-label={t("navigation.login")}
+              aria-label={
+                isLogged ? t("navigation.logout") : t("navigation.login")
+              }
               className="gap-2"
             >
-              <LogIn className="h-5 w-5" />
-              {t("navigation.login")}
+              {isLogged ? (
+                <LogOut className="h-5 w-5" />
+              ) : (
+                <LogIn className="h-5 w-5" />
+              )}
+              {isLogged ? t("navigation.logout") : t("navigation.login")}
             </Button>
           </div>
 
@@ -254,6 +271,21 @@ export function Header() {
                 >
                   <ShoppingCart className="mr-2 h-5 w-5" />
                   {t("navigation.cart")}
+                </Button>
+                <Button
+                  variant="outline"
+                  className="w-full justify-start px-4 py-3 rounded-xl"
+                  onClick={() => {
+                    setMobileMenuOpen(false);
+                    navigateTo("/login");
+                  }}
+                >
+                  {isLogged ? (
+                    <LogOut className="mr-2 h-5 w-5" />
+                  ) : (
+                    <LogIn className="mr-2 h-5 w-5" />
+                  )}
+                  {isLogged ? t("navigation.logout") : t("navigation.login")}
                 </Button>
               </div>
             </nav>

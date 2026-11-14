@@ -1,4 +1,4 @@
-import { defineConfig, devices } from "@playwright/test"
+import { defineConfig, devices } from "@playwright/test";
 
 export default defineConfig({
   testDir: "./e2e",
@@ -11,7 +11,7 @@ export default defineConfig({
     ["list"],
   ],
   use: {
-    baseURL: "http://localhost:5173",
+    baseURL: "http://localhost:5175",
     trace: "on-first-retry",
     screenshot: "only-on-failure",
     video: "retain-on-failure",
@@ -31,8 +31,8 @@ export default defineConfig({
     },
   ],
   webServer: {
-    command: "npm run dev",
-    url: "http://localhost:5173",
+    command: "npm run dev -- --port 5175 --strictPort",
+    url: "http://localhost:5175",
     reuseExistingServer: !process.env.CI,
     timeout: 120000,
   },
@@ -44,4 +44,4 @@ export default defineConfig({
   },
   snapshotDir: "./e2e/snapshots",
   snapshotPathTemplate: "{snapshotDir}/{testFilePath}/{arg}{ext}",
-})
+});

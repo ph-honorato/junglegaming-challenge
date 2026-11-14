@@ -25,3 +25,17 @@ dist-ssr
 
 # TanStack Router temp files
 .tanstack/
+
+<<<<<<< Updated upstream
+# Playwright tests
+/test-results
+/playwright-report
+=======
+
+# Implementation
+/designs
+CLAUDE.md
+AGENTS.md
+CONTEXT.md
+PLAN.md
+>>>>>>> Stashed changes

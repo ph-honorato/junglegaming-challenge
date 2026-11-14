@@ -1,5 +1,5 @@
 // CatalogSection Types
-import type { NFT, CategoryCount, NetworkCount, PriceRange } from "@/types/nft"
+import type { NFT } from "@/types/nft"
 
 export interface CatalogSectionProps {
   nfts: NFT[]
@@ -11,7 +11,4 @@ export interface CatalogSectionProps {
   currentPage: number
   onPageChange: (page: number) => void
   isError?: boolean
-  categories?: CategoryCount[]
-  networks?: NetworkCount[]
-  priceRange?: PriceRange
 }

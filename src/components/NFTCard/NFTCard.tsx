@@ -44,7 +44,10 @@ export function NFTCard({
     : 0;
 
   return (
-    <Card className="group relative h-full flex flex-col overflow-hidden transition-all duration-300 hover:shadow-xl hover:-translate-y-1 bg-card border-border hover:border-primary/40 p-3">
+    <Card
+      className="group relative h-full flex flex-col overflow-hidden transition-all duration-300 hover:shadow-xl hover:-translate-y-1 bg-card border-border hover:border-primary/40 p-3"
+      data-testid="nft-card"
+    >
       {/* Image Container with rounded corners */}
       <div className="relative aspect-square overflow-hidden rounded-xl bg-muted mb-3">
         {!imageLoaded && (
@@ -91,7 +94,7 @@ export function NFTCard({
         <Button
           variant="ghost"
           size="icon"
-          className="absolute top-2 right-2 z-20 h-8 w-8 bg-background/80 backdrop-blur-sm hover:bg-background/90 transition-all opacity-0 group-hover:opacity-100 rounded-full"
+          className="absolute top-2 right-2 z-20 h-8 w-8 bg-background/80 backdrop-blur-sm hover:bg-background/90 transition-all opacity-100 lg:opacity-0 lg:group-hover:opacity-100 rounded-full"
           onClick={() => onFavorite?.(nft.id)}
           aria-label={
             isFavorite ? t("nft.removeFromFavorites") : t("nft.addToFavorites")

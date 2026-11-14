@@ -66,7 +66,7 @@ export function NFTGallery({ images, alt }: NFTGalleryProps) {
             type="button"
             variant="ghost"
             size="icon"
-            className="absolute right-3 top-3 h-9 w-9 rounded-full bg-background/60 text-foreground hover:bg-background/80"
+            className="hidden lg:flex absolute right-3 top-3 h-9 w-9 rounded-full bg-background/60 text-foreground hover:bg-background/80"
             aria-label={t("nftDetail.zoomImage")}
             onClick={openZoom}
           >

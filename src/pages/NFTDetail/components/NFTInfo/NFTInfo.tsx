@@ -1,7 +1,12 @@
-import { Heart, Mail, Minus, Plus, Star } from "lucide-react";
+import { Heart, Mail, Minus, Plus, ShoppingCart, Star } from "lucide-react";
+import { useNavigate } from "@tanstack/react-router";
 import { useTranslation } from "react-i18next";
 
 import { Button } from "@components";
+import { useAuth } from "@/contexts/AuthContext";
+import { useAddCartItem } from "@/hooks/useCart";
+import { useToast } from "@/hooks/use-toast";
+import { savePendingPurchase } from "@/lib/pendingPurchase";
 
 import { useNFTInfo } from "./NFTInfo.hook";
 import type { NFTInfoProps } from "./NFTInfo.types";
@@ -35,6 +40,13 @@ function XIcon() {
 
 export function NFTInfo({ nft }: NFTInfoProps) {
   const { t } = useTranslation();
+  const navigate = useNavigate();
+  const { toast } = useToast();
+  const { isLogged } = useAuth();
+
+  const handleOpenCart = () => {
+    navigate({ to: "/cart" });
+  };
   const {
     quantity,
     increaseQuantity,
@@ -44,25 +56,69 @@ export function NFTInfo({ nft }: NFTInfoProps) {
     selectedEditionIndex,
     selectEdition,
   } = useNFTInfo(nft);
+  const { mutate: addItem, isPending: isAdding } = useAddCartItem();
+
+  const handleBuy = () => {
+    if (!isLogged) {
+      // Stash the intended purchase so the login flow can complete it
+      savePendingPurchase({ nftId: nft.id, quantity });
+      navigate({ to: "/login", search: { redirect: "/cart" } });
+      return;
+    }
+    addItem(
+      { nftId: nft.id, quantity },
+      {
+        onSuccess: () => navigate({ to: "/cart" }),
+        onError: () =>
+          toast({
+            title: t("nftDetail.buyError"),
+            variant: "destructive",
+          }),
+      },
+    );
+  };
 
   const rating = Math.round(nft.rating ?? 0);
+  const ratingValue = Number(nft.rating ?? 0);
+  const reviewsCount = nft.reviews?.length ?? 0;
+  const ratingAriaLabel = t("nftDetail.ratingLabel", {
+    rating: nft.rating ?? 0,
+  });
   const shareUrl = typeof window !== "undefined" ? window.location.href : "";
   const encodedShareUrl = encodeURIComponent(shareUrl);
 
   return (
     <div>
-      <h1 className="text-3xl font-bold tracking-tight text-foreground md:text-4xl">
-        {nft.name}
-      </h1>
+      {/* Title with compact rating pill on mobile */}
+      <div className="flex flex-wrap items-center justify-between gap-3">
+        <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold tracking-tight text-foreground">
+          {nft.name}
+        </h1>
 
-      <div className="mt-3 flex flex-wrap items-center justify-between gap-3 border-b-[0.2px] border-current text-muted-foreground pb-1">
+        {/* Mobile rating pill */}
+        <div
+          role="img"
+          aria-label={ratingAriaLabel}
+          className="lg:hidden inline-flex items-center gap-1 rounded-full border border-primary/40 px-2.5 py-1 text-sm font-semibold text-foreground"
+        >
+          <Star
+            className="h-3.5 w-3.5 fill-primary text-primary"
+            aria-hidden="true"
+          />
+          <span>{ratingValue.toFixed(1)}</span>
+          <span className="font-bold text-primary">{`(${reviewsCount})`}</span>
+        </div>
+      </div>
+
+      {/* Desktop price and rating row */}
+      <div className="mt-3 hidden lg:flex flex-wrap items-center justify-between gap-3 border-b-[0.2px] border-current text-muted-foreground pb-1">
         <p className="text-xl font-bold text-primary md:text-2xl">
           {Number(nft.price).toFixed(2)} ETH
         </p>
         <div className="flex items-center gap-2">
           <div
             role="img"
-            aria-label={t("nftDetail.ratingLabel", { rating: nft.rating ?? 0 })}
+            aria-label={ratingAriaLabel}
             className="flex items-center gap-0.5"
           >
             {[0, 1, 2, 3, 4].map((index) => (
@@ -78,7 +134,7 @@ export function NFTInfo({ nft }: NFTInfoProps) {
             ))}
           </div>
           <span className="text-sm text-foreground">
-            {t("nftDetail.reviewsShort", { count: nft.reviews?.length ?? 0 })}
+            {t("nftDetail.reviewsShort", { count: reviewsCount })}
           </span>
         </div>
       </div>
@@ -122,7 +178,8 @@ export function NFTInfo({ nft }: NFTInfoProps) {
         </div>
       </div>
 
-      <div className="mt-8 flex flex-wrap items-center justify-between gap-4">
+      {/* Desktop quantity + CTA row */}
+      <div className="mt-8 hidden lg:flex flex-wrap items-center justify-between gap-4">
         <div className="flex items-center gap-4">
           <Button
             variant="default"
@@ -153,8 +210,11 @@ export function NFTInfo({ nft }: NFTInfoProps) {
         </div>
 
         <div className="flex items-right gap-2">
-          {/* Intentionally inert: purchase flow is out of scope. */}
-          <Button className="h-11 rounded-lg bg-primary px-8 text-sm font-bold tracking-wide text-primary-foreground hover:bg-primary/90">
+          <Button
+            className="h-11 rounded-lg bg-primary px-8 text-sm font-bold tracking-wide text-primary-foreground hover:bg-primary/90"
+            onClick={handleBuy}
+            disabled={isAdding}
+          >
             {t("nftDetail.buy")}
           </Button>
           {/* Intentionally inert: favorite flow is out of scope. */}
@@ -211,6 +271,67 @@ export function NFTInfo({ nft }: NFTInfoProps) {
         >
           <XIcon />
         </a>
+      </div>
+
+      {/* Mobile fixed purchase bar */}
+      <div className="lg:hidden fixed inset-x-0 bottom-0 z-40 border-t border-border bg-card px-4 pt-3 pb-4">
+        <div className="mx-auto max-w-[1200px]">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <span className="text-sm text-muted-foreground">
+                {t("nftDetail.quantityShort")}
+              </span>
+              <Button
+                variant="outline"
+                size="icon"
+                className="h-8 w-8 rounded-full border-border"
+                aria-label={t("nftDetail.decreaseQuantity")}
+                disabled={!canDecrease}
+                onClick={decreaseQuantity}
+              >
+                <Minus className="h-3.5 w-3.5" />
+              </Button>
+              <span
+                className="min-w-6 text-center text-base font-semibold text-foreground"
+                aria-label={t("nftDetail.quantity")}
+              >
+                {quantity}
+              </span>
+              <Button
+                variant="outline"
+                size="icon"
+                className="h-8 w-8 rounded-full border-border"
+                aria-label={t("nftDetail.increaseQuantity")}
+                disabled={!canIncrease}
+                onClick={increaseQuantity}
+              >
+                <Plus className="h-3.5 w-3.5" />
+              </Button>
+            </div>
+
+            <span className="text-lg font-bold text-primary">
+              {Number(nft.price).toFixed(2)} ETH
+            </span>
+          </div>
+
+          <div className="mt-3 flex items-center gap-3">
+            <Button
+              className="h-12 flex-1 rounded-xl bg-primary text-sm font-bold text-primary-foreground hover:bg-primary/90"
+              onClick={handleBuy}
+            >
+              {t("nftDetail.buyNft")}
+            </Button>
+            <Button
+              variant="outline"
+              size="icon"
+              className="h-12 w-12 flex-shrink-0 rounded-full border-border"
+              aria-label={t("navigation.cart")}
+              onClick={handleOpenCart}
+            >
+              <ShoppingCart className="h-5 w-5" aria-hidden="true" />
+            </Button>
+          </div>
+        </div>
       </div>
     </div>
   );
