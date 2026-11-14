@@ -2,20 +2,19 @@
 
 Aplicação web de um **marketplace de NFTs** construída em React + TypeScript, seguindo o [layout no Figma](https://www.figma.com/design/Ff0SksUi7UFtPWUO8kyNtw/Frontend-Challenge?node-id=0-1) e o enunciado em [`CHALLENGE.md`](./CHALLENGE.md).
 
-O produto usa a identidade visual **KURIO** e textos em pt-BR (`src/i18n/pt-BR.json`). APIs, autenticação, carteiras e pagamentos são simulados via **MSW**.
+O produto usa a identidade visual **KURIO** e textos em pt-BR (`src/i18n/pt-BR.json`). As APIs de NFTs e carrinho são simuladas via **MSW**, e a sessão é simulada no cliente.
 
-> ⚠️ **Status da entrega:** este repositório está em desenvolvimento. Os fluxos de **descoberta** (início + catálogo) e **detalhe do NFT** estão implementados; os fluxos de **conta**, **carrinho**, **pagamento** e **confirmação** estão apenas como _stubs_ (páginas com título, sem lógica). Consulte a seção [Status e pendências](#status-e-pendências) para a lista completa do que ainda falta em relação ao `CHALLENGE.md`.
+> **Status da entrega:** os fluxos de **início/catálogo**, **detalhe do NFT**, **carrinho** e **login simulado** estão implementados; **checkout/pagamento**, **confirmação de pedido**, **cadastro**, **perfil** e **carteiras** não foram implementados. Detalhes na seção [Status da implementação](#status-da-implementação).
 
 ---
 
 ## Sumário
 
 - [Stack](#stack)
-- [Status e pendências](#status-e-pendências)
+- [Status da implementação](#status-da-implementação)
 - [Requisitos](#requisitos)
 - [Setup](#setup)
 - [Variáveis de ambiente](#variáveis-de-ambiente)
-- [Credenciais fictícias](#credenciais-fictícias)
 - [Cenários de mock: seleção e reset](#cenários-de-mock-seleção-e-reset)
 - [Comandos](#comandos)
 - [Arquitetura](./ARCHITECTURE.md)
@@ -32,28 +31,35 @@ O produto usa a identidade visual **KURIO** e textos em pt-BR (`src/i18n/pt-BR.j
 | Estado remoto                 | TanStack Query                 |
 | Cliente HTTP                  | Axios                          |
 | Integração de dados           | REST                           |
-| Tempo real                    | Socket.IO (`socket.io-client`) |
 | Estilização                   | Tailwind CSS v4                |
 | Componentes                   | shadcn/ui (Radix UI)           |
 | Mocking                       | MSW                            |
 | Testes unitários              | Vitest + Testing Library       |
-| Testes E2E e regressão visual | Playwright                     |
+| Testes E2E                    | Playwright                     |
 | Qualidade                     | Lighthouse, oxlint             |
 | Build                         | Vite                           |
 
 ---
 
-## Status e pendências
+## Status da implementação
 
 ### Implementado
 
-- **Início** (`/`): hero/carrossel de destaques, catálogo com **busca, filtros (categoria, rede, faixa de preço), abas (todos/novos/em alta), ordenação e paginação** sincronizados com a URL, seções de criadores e blog.
-- **Detalhe do NFT** (`/nft/$id`): galeria com zoom, informações, edição/atributos, avaliações, carrossel da coleção, _skeleton_ de carregamento e estados de **erro** e **não encontrado (404)**.
-- **Camada de dados**: cliente Axios com interceptors (token + refresh em 401), TanStack Query com política de cache/retry, contratos tipados em `src/types/nft.ts`.
-- **MSW**: handlers para os recursos de NFT (listagem, destaque, filtros e detalhe), com suporte a latência, falha e respostas fora de ordem configuráveis.
-- **Socket.IO**: cliente e hook (`useSocket`) com conexão, reconexão, _subscriptions_ e _listeners_ tipados. **Sem servidor/mock de socket ativo** (ver pendências).
+- **Início** (`/`): hero/carrossel de destaques e catálogo com **busca, filtros (categoria, rede, faixa de preço), abas, ordenação e paginação** sincronizados com a URL, além das seções de criadores e blog.
+- **Detalhe do NFT** (`/nft/$id`): galeria, edição/atributos, avaliações, carrossel da coleção e estados de **carregamento**, **erro** e **não encontrado (404)**.
+- **Carrinho** (`/cart`): adicionar/atualizar/remover itens, **cupons** (`KURIO10`, `LAUNCH5`), resumo com taxas, persistência após refresh e limpeza no logout.
+- **Login** (`/login`): sessão **simulada no cliente** (login/logout), com retomada de compra iniciada antes do login.
+- **Camada de dados**: cliente Axios com interceptors (token + refresh em 401), TanStack Query com cache/retry e contratos tipados.
+- **MSW**: handlers de NFTs e carrinho, com latência, falhas e respostas fora de ordem configuráveis.
 - **i18n**: pt-BR.
-- **Testes**: testes unitários (Vitest) de componentes e um esqueleto de testes E2E (Playwright).
+- **Testes**: unitários (Vitest) e E2E dos fluxos críticos (Playwright).
+
+### Não implementado
+
+- **Checkout** (`/checkout`), **confirmação de pedido** (`/order/$id`), **cadastro** (`/register`), **perfil** (`/profile`) e **carteiras** (`/wallets`): apenas páginas _stub_, sem lógica.
+- **Autenticação real**: o login é simulado no cliente; não há API de autenticação, usuários nem credenciais fictícias.
+- **Pedidos e favoritos**: nenhum endpoint ou fluxo.
+- **Tempo real**: existe um cliente Socket.IO no código, mas ele não é usado por nenhuma tela e não há servidor/mock ativo.
 
 ---
 
@@ -90,34 +96,20 @@ npm run dev
 | Variável            | Padrão                              | Descrição                                                                             |
 | ------------------- | ----------------------------------- | ------------------------------------------------------------------------------------- |
 | `VITE_API_URL`      | `""` (mesma origem)                 | Base URL do cliente Axios. Vazio mantém requisições relativas para o MSW interceptar. |
-| `VITE_SOCKET_URL`   | `http://localhost:3001`             | URL do servidor Socket.IO.                                                            |
 | `VITE_ENABLE_MOCKS` | `true` (qualquer valor ≠ `"false"`) | Liga/desliga o MSW. Use `"false"` para apontar para uma API real.                     |
 
 Exemplo de `.env` para desenvolvimento:
 
 ````dotenv
 VITE_API_URL=
-VITE_SOCKET_URL=http://localhost:3001
 VITE_ENABLE_MOCKS=true
-
----
-
-## Credenciais fictícias
-
-> ⚠️ **Pendência:** o `CHALLENGE.md` exige **pelo menos dois usuários** fictícios e credenciais documentadas. **Nenhuma credencial está definida no código** — não há handlers de autenticação nem fixtures de usuário.
-
-| E-mail        | Senha         | Perfil        |
-| ------------- | ------------- | ------------- |
-| _(a definir)_ | _(a definir)_ | _(a definir)_ |
-| _(a definir)_ | _(a definir)_ | _(a definir)_ |
-
-Quando o fluxo de conta for implementado, as credenciais devem usar dados fictícios e **nunca armazenar senhas em claro**.
+````
 
 ---
 
 ## Cenários de mock: seleção e reset
 
-Hoje o único controle de cenário disponível é **programático**, em `src/mocks/handlers/nfts.ts`:
+O controle de cenário é **programático**, em `src/mocks/handlers/nfts.ts` (NFTs) e `src/mocks/handlers/cart.ts` (carrinho):
 
 ```ts
 import { setMockConfig, resetMockConfig } from "@/mocks/handlers/nfts";
@@ -136,6 +128,10 @@ setMockConfig({ outOfOrder: true });
 
 // Restaurar o cenário padrão (delay 0, sem falha, sem out-of-order)
 resetMockConfig();
+
+// Carrinho: simular falha HTTP 500 (import de "@/mocks/handlers/cart")
+setCartMockConfig({ shouldFail: true, failStatus: 500 });
+resetCartMockConfig();
 ````
 
 | Cenário                            | Como reproduzir                                                                                                              |
