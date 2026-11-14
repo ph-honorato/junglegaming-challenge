@@ -152,7 +152,10 @@ export function NFTDetailPage() {
           </BreadcrumbList>
         </Breadcrumb>
 
-        <div className="mt-8 grid items-start gap-10 lg:mt-10 lg:grid-cols-[1.15fr_1fr] lg:gap-16">
+        <div
+          className="mt-8 grid items-start gap-10 lg:mt-10 lg:grid-cols-[1.15fr_1fr] lg:gap-16"
+          data-testid="nft-details"
+        >
           <NFTGallery
             images={nft.gallery ?? (nft.image ? [nft.image] : [])}
             alt={nft.name}
