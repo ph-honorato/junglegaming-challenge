@@ -101,9 +101,9 @@
     "network": "Rede:",
     "networkMinted": "Cunhado na {{network}} com procedência imutável e metadados armazenados no IPFS.",
     "contract": "Contrato:",
-    "contractInfo": "{{contract}} • Contrato inteligente {{standard}} verificado.",
+    "contractInfo": "Direitos autorais do criador: {{royalties}}% nas vendas secundárias, pagos automaticamente pelos mercados compatíveis.",
     "royalties": "Direitos autorais:",
-    "royaltiesInfo": "Direitos autorais do criador: {{royalties}}% nas vendas secundárias, pagos automaticamente pelos mercados compatíveis.",
+    "royaltiesInfo": "{{contract}} • Contrato inteligente {{standard}} verificado.",
     "moreFromCollection": "Mais desta coleção",
     "loading": "Carregando NFT...",
     "galleryLabel": "Galeria de imagens do NFT",
@@ -150,6 +150,7 @@
     "explore": "Explorar"
   },
   "navigation": {
+    "main": "Navegação principal",
     "home": "Início",
     "marketplace": "Mercado",
     "creators": "Criadores",

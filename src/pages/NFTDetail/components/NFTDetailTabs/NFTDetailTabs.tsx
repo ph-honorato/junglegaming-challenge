@@ -36,32 +36,41 @@ export function NFTDetailTabs({ nft }: NFTDetailTabsProps) {
       <TabsContent value="details" className="mt-8 space-y-6">
         <div className="mt-8 space-y-6">
           {paragraphs.map((paragraph) => (
-            <p key={paragraph} className="text-sm leading-relaxed text-muted-foreground">
+            <p
+              key={paragraph}
+              className="text-sm leading-relaxed text-muted-foreground"
+            >
               {paragraph}
             </p>
           ))}
 
           <div>
-            <h3 className="text-sm font-bold text-foreground">{t("nftDetail.network")}</h3>
+            <h3 className="text-sm font-bold text-foreground">
+              {t("nftDetail.network")}
+            </h3>
             <p className="mt-1 text-sm leading-relaxed text-muted-foreground">
               {t("nftDetail.networkMinted", { network: nft.network })}
             </p>
           </div>
 
           <div>
-            <h3 className="text-sm font-bold text-foreground">{t("nftDetail.contract")}</h3>
+            <h3 className="text-sm font-bold text-foreground">
+              {t("nftDetail.contract")}
+            </h3>
             <p className="mt-1 text-sm leading-relaxed text-muted-foreground">
-              {t("nftDetail.contractInfo", {
-                contract: shortContract,
-                standard: nft.tokenStandard ?? "ERC-721",
-              })}
+              {t("nftDetail.contractInfo", { royalties: nft.royalties ?? 0 })}
             </p>
           </div>
 
           <div>
-            <h3 className="text-sm font-bold text-foreground">{t("nftDetail.royalties")}</h3>
+            <h3 className="text-sm font-bold text-foreground">
+              {t("nftDetail.royalties")}
+            </h3>
             <p className="mt-1 text-sm leading-relaxed text-muted-foreground">
-              {t("nftDetail.royaltiesInfo", { royalties: nft.royalties ?? 0 })}
+              {t("nftDetail.royaltiesInfo", {
+                contract: shortContract,
+                standard: nft.tokenStandard ?? "ERC-721",
+              })}
             </p>
           </div>
         </div>
@@ -69,7 +78,9 @@ export function NFTDetailTabs({ nft }: NFTDetailTabsProps) {
 
       <TabsContent value="reviews" className="mt-8">
         {reviews.length === 0 ? (
-          <p className="text-sm text-muted-foreground">{t("nftDetail.reviewsEmpty")}</p>
+          <p className="text-sm text-muted-foreground">
+            {t("nftDetail.reviewsEmpty")}
+          </p>
         ) : (
           <>
             <h3 className="sr-only">{t("nftDetail.reviewsTitle")}</h3>
@@ -89,10 +100,14 @@ export function NFTDetailTabs({ nft }: NFTDetailTabsProps) {
                   )}
                   <div className="flex-1">
                     <div className="flex flex-wrap items-center justify-between gap-2">
-                      <span className="text-sm font-semibold text-foreground">{review.user}</span>
+                      <span className="text-sm font-semibold text-foreground">
+                        {review.user}
+                      </span>
                       <div
                         role="img"
-                        aria-label={t("nftDetail.reviewStars", { rating: review.rating })}
+                        aria-label={t("nftDetail.reviewStars", {
+                          rating: review.rating,
+                        })}
                         className="flex items-center gap-0.5"
                       >
                         {Array.from({ length: 5 }, (_, starIndex) => (
@@ -106,7 +121,10 @@ export function NFTDetailTabs({ nft }: NFTDetailTabsProps) {
                           />
                         ))}
                       </div>
-                      <time dateTime={review.date} className="text-xs text-muted-foreground">
+                      <time
+                        dateTime={review.date}
+                        className="text-xs text-muted-foreground"
+                      >
                         {new Intl.DateTimeFormat("pt-BR", {
                           day: "2-digit",
                           month: "short",
