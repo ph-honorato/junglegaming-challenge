@@ -1,4 +1,4 @@
-import { useNavigate } from "@tanstack/react-router";
+import { useNavigate, useSearch } from "@tanstack/react-router";
 import { useTranslation } from "react-i18next";
 import { LogIn, LogOut } from "lucide-react";
 import {
@@ -15,11 +15,12 @@ import { useAuth } from "@/contexts/AuthContext";
 function LoginPage() {
   const { t } = useTranslation();
   const navigate = useNavigate();
+  const { redirect } = useSearch({ from: "/login" });
   const { isLogged, login, logout } = useAuth();
 
   const handleSimulateLogin = () => {
     login();
-    navigate({ to: "/" });
+    navigate({ to: redirect ?? "/" });
   };
 
   const handleLogout = () => {

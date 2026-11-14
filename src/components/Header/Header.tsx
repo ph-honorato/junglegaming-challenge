@@ -1,7 +1,15 @@
 import * as React from "react";
 import { useLocation, useNavigate } from "@tanstack/react-router";
 import { useAuth } from "../../contexts/AuthContext";
-import { Search, Heart, ShoppingCart, Menu, X, LogIn, LogOut } from "lucide-react";
+import {
+  Search,
+  Heart,
+  ShoppingCart,
+  Menu,
+  X,
+  LogIn,
+  LogOut,
+} from "lucide-react";
 import {
   Button,
   NavigationMenu,

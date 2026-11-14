@@ -4,6 +4,7 @@ import { describe, it, expect } from "vitest"
 import "@testing-library/jest-dom"
 import { NFTInfo } from "./NFTInfo"
 import { I18nextProvider } from "react-i18next"
+import { AuthProvider } from "@/contexts/AuthContext"
 import i18n from "@/i18n"
 import type { NFT } from "@/types/nft"
 
@@ -39,7 +40,9 @@ const mockNFT: NFT = {
 function renderWithProviders(nft: NFT = mockNFT) {
   return render(
     <I18nextProvider i18n={i18n}>
-      <NFTInfo nft={nft} />
+      <AuthProvider>
+        <NFTInfo nft={nft} />
+      </AuthProvider>
     </I18nextProvider>
   )
 }
