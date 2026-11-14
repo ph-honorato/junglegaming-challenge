@@ -43,10 +43,6 @@ const emptyCart: CartResponse = {
   },
 };
 
-vi.mock("@tanstack/react-router", () => ({
-  useNavigate: () => vi.fn(),
-}));
-
 // Mock reviews (19 collector reviews)
 const mockReviews = Array.from({ length: 19 }, (_, i) => ({
   id: `review-${i + 1}`,
@@ -76,26 +72,8 @@ const mockNFT: NFT = {
   reviews: mockReviews,
 };
 
-function renderWithProviders(nft: NFT = mockNFT) {
-  const queryClient = new QueryClient({
-    defaultOptions: { queries: { retry: false } },
-  });
-  return render(
-    <I18nextProvider i18n={i18n}>
-      <AuthProvider>
-        <QueryClientProvider client={queryClient}>
-          <NFTInfo nft={nft} />
-        </QueryClientProvider>
-      </AuthProvider>
-    </I18nextProvider>,
-  );
-}
-
-// Renders NFTInfo over stub routes so buy navigation can be asserted
-async function renderWithRouter(nft: NFT = mockNFT) {
-  const queryClient = new QueryClient({
-    defaultOptions: { queries: { retry: false } },
-  });
+// Builds a stub router so useNavigate has a proper context in every render
+function createStubRouter(nft: NFT, initialPath: string) {
   const rootRoute = createRootRoute({
     component: () => (
       <>
@@ -119,10 +97,36 @@ async function renderWithRouter(nft: NFT = mockNFT) {
     path: "/login",
     component: () => <div>login-page-marker</div>,
   });
-  const router = createRouter({
+  return createRouter({
     routeTree: rootRoute.addChildren([homeRoute, cartRoute, loginRoute]),
-    history: createMemoryHistory({ initialEntries: ["/nft/nft-1"] }),
+    history: createMemoryHistory({ initialEntries: [initialPath] }),
   });
+}
+
+async function renderWithProviders(nft: NFT = mockNFT) {
+  const queryClient = new QueryClient({
+    defaultOptions: { queries: { retry: false } },
+  });
+  const router = createStubRouter(nft, "/");
+  // Resolve the initial navigation before mounting so the first render is final
+  await router.load();
+  return render(
+    <I18nextProvider i18n={i18n}>
+      <AuthProvider>
+        <QueryClientProvider client={queryClient}>
+          <RouterProvider router={router} />
+        </QueryClientProvider>
+      </AuthProvider>
+    </I18nextProvider>,
+  );
+}
+
+// Renders NFTInfo over stub routes so buy navigation can be asserted
+async function renderWithRouter(nft: NFT = mockNFT) {
+  const queryClient = new QueryClient({
+    defaultOptions: { queries: { retry: false } },
+  });
+  const router = createStubRouter(nft, "/nft/nft-1");
 
   render(
     <I18nextProvider i18n={i18n}>
@@ -145,8 +149,8 @@ beforeEach(() => {
 });
 
 describe("NFTInfo", () => {
-  it("renders name, price and collector reviews count", () => {
-    renderWithProviders();
+  it("renders name, price and collector reviews count", async () => {
+    await renderWithProviders();
     expect(
       screen.getByRole("heading", { level: 1, name: "Emerald Ape #042" }),
     ).toBeInTheDocument();
@@ -156,8 +160,8 @@ describe("NFTInfo", () => {
     ).toBeInTheDocument();
   });
 
-  it("renders rating with accessible label on desktop and mobile variants", () => {
-    renderWithProviders();
+  it("renders rating with accessible label on desktop and mobile variants", async () => {
+    await renderWithProviders();
     // Desktop stars group and mobile rating pill share the same accessible label
     expect(
       screen.getAllByRole("img", {
@@ -169,8 +173,8 @@ describe("NFTInfo", () => {
     expect(screen.getByText("(19)")).toBeInTheDocument();
   });
 
-  it("renders buy and favorite buttons and buy stays inert when logged out", () => {
-    renderWithProviders();
+  it("renders buy and favorite buttons and buy stays inert when logged out", async () => {
+    await renderWithProviders();
     const buyButton = screen.getByRole("button", { name: "COMPRAR" });
     const favoriteButton = screen.getByRole("button", { name: "Favoritar" });
     expect(buyButton).toBeInTheDocument();
@@ -180,8 +184,8 @@ describe("NFTInfo", () => {
     expect(mockAddCartItem).not.toHaveBeenCalled();
   });
 
-  it("caps quantity at maxEdition on increase and at 1 on decrease", () => {
-    renderWithProviders();
+  it("caps quantity at maxEdition on increase and at 1 on decrease", async () => {
+    await renderWithProviders();
     // Quantity stepper renders twice (desktop row + mobile purchase bar)
     const increaseButtons = screen.getAllByRole("button", {
       name: "Aumentar quantidade",
@@ -205,8 +209,8 @@ describe("NFTInfo", () => {
     quantities.forEach((quantity) => expect(quantity).toHaveTextContent("1"));
   });
 
-  it("renders the mobile fixed purchase bar with buy and cart actions", () => {
-    renderWithProviders();
+  it("renders the mobile fixed purchase bar with buy and cart actions", async () => {
+    await renderWithProviders();
     expect(
       screen.getByRole("button", { name: "Comprar NFT" }),
     ).toBeInTheDocument();
@@ -216,8 +220,8 @@ describe("NFTInfo", () => {
     expect(screen.getByText("Qtd.")).toBeInTheDocument();
   });
 
-  it("highlights the last edition badge by default and moves selection on click", () => {
-    renderWithProviders();
+  it("highlights the last edition badge by default and moves selection on click", async () => {
+    await renderWithProviders();
     const firstBadge = screen.getByRole("button", { name: "1/1" });
     const secondBadge = screen.getByRole("button", { name: "1/16" });
     const lastBadge = screen.getByRole("button", { name: "1/50" });
@@ -231,13 +235,13 @@ describe("NFTInfo", () => {
     expect(lastBadge).toHaveAttribute("aria-pressed", "false");
   });
 
-  it("renders the edition status pill", () => {
-    renderWithProviders();
+  it("renders the edition status pill", async () => {
+    await renderWithProviders();
     expect(screen.getByText("ABERTA")).toBeInTheDocument();
   });
 
-  it("renders token id, collection and attributes meta rows", () => {
-    renderWithProviders();
+  it("renders token id, collection and attributes meta rows", async () => {
+    await renderWithProviders();
     expect(screen.getByText("ID do token: #0042")).toBeInTheDocument();
     expect(screen.getByText("Coleção: Kurio Apes")).toBeInTheDocument();
     expect(
@@ -245,8 +249,8 @@ describe("NFTInfo", () => {
     ).toBeInTheDocument();
   });
 
-  it("renders share links with accessible names and correct hrefs", () => {
-    renderWithProviders();
+  it("renders share links with accessible names and correct hrefs", async () => {
+    await renderWithProviders();
 
     const linkedinLink = screen.getByRole("link", {
       name: "Compartilhar no LinkedIn",
@@ -281,9 +285,9 @@ describe("NFTInfo", () => {
     localStorage.setItem("isLogged", "true");
     const { router } = await renderWithRouter();
 
-    // Pick quantity 2 before buying
+    // Pick quantity 2 before buying (desktop + mobile steppers share state)
     fireEvent.click(
-      screen.getByRole("button", { name: "Aumentar quantidade" }),
+      screen.getAllByRole("button", { name: "Aumentar quantidade" })[0],
     );
     fireEvent.click(screen.getByRole("button", { name: "COMPRAR" }));
 
