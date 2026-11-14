@@ -163,6 +163,14 @@
     "about": "Sobre",
     "contact": "Contato"
   },
+  "login": {
+    "title": "Entrar",
+    "subtitle": "Simule a autenticação para acessar os recursos exclusivos da sua conta.",
+    "simulate": "Simular login",
+    "loggedTitle": "Você está logado",
+    "loggedDescription": "Esta é uma sessão simulada. Clique abaixo para encerrá-la.",
+    "hint": "Autenticação simulada — nenhum dado real é enviado."
+  },
   "footer": {
     "features": {
       "walletSecurity": "Segurança da carteira",

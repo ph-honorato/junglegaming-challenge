@@ -1,7 +1,9 @@
 import { Heart, Mail, Minus, Plus, Star } from "lucide-react";
+import { useNavigate } from "@tanstack/react-router";
 import { useTranslation } from "react-i18next";
 
 import { Button } from "@components";
+import { useAuth } from "@/contexts/AuthContext";
 
 import { useNFTInfo } from "./NFTInfo.hook";
 import type { NFTInfoProps } from "./NFTInfo.types";
@@ -35,6 +37,16 @@ function XIcon() {
 
 export function NFTInfo({ nft }: NFTInfoProps) {
   const { t } = useTranslation();
+  const navigate = useNavigate();
+  const { isLogged } = useAuth();
+
+  const handleBuy = () => {
+    if (isLogged) {
+      navigate({ to: "/cart" });
+    } else {
+      navigate({ to: "/login", search: { redirect: "/cart" } });
+    }
+  };
   const {
     quantity,
     increaseQuantity,
@@ -153,8 +165,10 @@ export function NFTInfo({ nft }: NFTInfoProps) {
         </div>
 
         <div className="flex items-right gap-2">
-          {/* Intentionally inert: purchase flow is out of scope. */}
-          <Button className="h-11 rounded-lg bg-primary px-8 text-sm font-bold tracking-wide text-primary-foreground hover:bg-primary/90">
+          <Button
+            className="h-11 rounded-lg bg-primary px-8 text-sm font-bold tracking-wide text-primary-foreground hover:bg-primary/90"
+            onClick={handleBuy}
+          >
             {t("nftDetail.buy")}
           </Button>
           {/* Intentionally inert: favorite flow is out of scope. */}

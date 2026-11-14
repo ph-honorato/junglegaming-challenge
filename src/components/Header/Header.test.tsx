@@ -19,6 +19,7 @@ import {
 } from "@tanstack/react-router";
 import type { Router } from "@tanstack/react-router";
 import i18n from "@/i18n";
+import { AuthProvider } from "@/contexts/AuthContext";
 import { Header } from "./Header";
 
 // Renders the header over stub routes that carry the home page section ids.
@@ -71,7 +72,9 @@ async function renderHeader(initialUrl: string) {
 
   render(
     <I18nextProvider i18n={i18n}>
-      <RouterProvider router={router} />
+      <AuthProvider>
+        <RouterProvider router={router} />
+      </AuthProvider>
     </I18nextProvider>,
   );
 
@@ -87,6 +90,7 @@ function getMainNav() {
 }
 
 beforeEach(() => {
+  localStorage.clear();
   vi.mocked(Element.prototype.scrollIntoView).mockClear();
 });
 
@@ -141,6 +145,18 @@ describe("Header", () => {
     const { router } = await renderHeader("/");
 
     fireEvent.click(screen.getByRole("button", { name: "Entrar" }));
+
+    await waitFor(() => {
+      expect(router.state.location.pathname).toBe("/login");
+    });
+    expect(screen.getByText("login-page-marker")).toBeInTheDocument();
+  });
+
+  it("shows the logout label when logged in and still navigates to /login", async () => {
+    localStorage.setItem("isLogged", "true");
+    const { router } = await renderHeader("/");
+
+    fireEvent.click(screen.getByRole("button", { name: "Sair" }));
 
     await waitFor(() => {
       expect(router.state.location.pathname).toBe("/login");
